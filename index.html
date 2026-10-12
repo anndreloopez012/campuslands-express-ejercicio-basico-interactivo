@@ -12,7 +12,7 @@
       --bg-dark: #090d16;
       --bg-surface: #0f1523;
       --bg-card: #151d30;
-      --bg-code: #0b0f1a;
+      --bg-code: #1e1e1e; /* Color oficial VS Code Dark+ */
       --border-subtle: #1e293b;
       --border-accent: rgba(56, 189, 248, 0.35);
       --text-main: #f8fafc;
@@ -25,7 +25,7 @@
       --campus-amber: #f59e0b;
       --campus-red: #ef4444;
       --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
       --transition-speed: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -162,11 +162,11 @@
     body.mode-slides .slide-item {
       display: none;
       width: 100%;
-      max-width: 1220px;
+      max-width: 1240px;
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: 20px;
-      padding: 2.75rem;
+      padding: 2.5rem;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
       animation: fadeInSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       position: relative;
@@ -179,7 +179,7 @@
     /* Modo Documento Continuo */
     body.mode-doc main.presentation-wrapper {
       display: block;
-      max-width: 1100px;
+      max-width: 1120px;
       margin: 80px auto 40px auto;
       padding: 1rem;
     }
@@ -259,7 +259,7 @@
       font-size: 1.05rem;
       color: var(--text-muted);
       margin-bottom: 2rem;
-      max-width: 960px;
+      max-width: 980px;
     }
 
     /* Grillas y Cajas */
@@ -319,7 +319,7 @@
       line-height: 1.6;
     }
 
-    /* Bloques de Código de Terminal con Botón de Copiado */
+    /* Bloques de Terminal con Botón de Copiado */
     .terminal-box {
       background: #060910;
       border: 1px solid var(--border-subtle);
@@ -364,7 +364,7 @@
 
     /* Diagrama de Pipeline de Middlewares */
     .pipeline-container {
-      background: var(--bg-code);
+      background: #0b0f19;
       border: 1px solid var(--border-subtle);
       border-radius: 14px;
       padding: 1.5rem;
@@ -477,121 +477,165 @@
     .badge-status.s404 { background: rgba(239, 68, 68, 0.15); color: #f87171; }
     .badge-status.s500 { background: rgba(225, 29, 72, 0.2); color: #fda4af; }
 
-    /* Explorador de Código Línea a Línea */
-    .code-explorer-container {
-      background: var(--bg-code);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
+    /* ========================================================= */
+    /* EXPLORADOR DE CÓDIGO ESTILO VS CODE DARK+                 */
+    /* ========================================================= */
+    .vscode-window {
+      background: #1e1e1e; /* Fondo exacto de editor VS Code */
+      border: 1px solid #333333;
+      border-radius: 12px;
       overflow: hidden;
       margin: 1.5rem 0;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65);
       display: flex;
       flex-direction: column;
     }
 
-    .code-tabs {
+    /* Pestañas superiores estilo VS Code */
+    .vscode-tabs-bar {
       display: flex;
-      flex-wrap: wrap;
-      background: #060910;
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 0.4rem 0.75rem;
-      gap: 0.4rem;
+      background: #252526;
+      overflow-x: auto;
+      border-bottom: 1px solid #1e1e1e;
+      scrollbar-width: none;
     }
+    .vscode-tabs-bar::-webkit-scrollbar { display: none; }
 
-    .code-tab-btn {
-      background: transparent;
-      color: var(--text-muted);
+    .vscode-tab {
+      background: #2d2d2d;
+      color: #969696;
       border: none;
-      padding: 0.5rem 0.9rem;
-      border-radius: 6px;
+      border-right: 1px solid #1e1e1e;
+      border-top: 2px solid transparent;
+      padding: 0.6rem 1.1rem;
       font-family: var(--font-mono);
       font-size: 0.8rem;
       cursor: pointer;
-      transition: all var(--transition-speed);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
     }
 
-    .code-tab-btn:hover {
-      color: var(--text-main);
-      background: rgba(255, 255, 255, 0.05);
+    .vscode-tab:hover {
+      background: #323232;
+      color: #ffffff;
     }
 
-    .code-tab-btn.active {
-      color: var(--campus-cyan);
-      background: rgba(56, 189, 248, 0.12);
-      font-weight: 700;
+    .vscode-tab.active {
+      background: #1e1e1e;
+      color: #ffffff;
+      border-top: 2px solid #007acc; /* Indicador azul de pestaña activa en VS Code */
+      font-weight: 600;
     }
 
-    .code-split {
+    .tab-icon-js {
+      color: #f7df1e;
+      font-weight: 900;
+      font-size: 0.72rem;
+      background: #323330;
+      padding: 0.1rem 0.25rem;
+      border-radius: 3px;
+    }
+
+    /* Barra de ruta (Breadcrumbs) */
+    .vscode-breadcrumbs {
+      background: #1e1e1e;
+      border-bottom: 1px solid #2d2d2d;
+      padding: 0.35rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #858585;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .vscode-breadcrumbs span.active-crumb {
+      color: #cccccc;
+    }
+
+    /* Área Dividida: Código Fuente vs Panel Explicativo */
+    .vscode-body {
       display: grid;
       grid-template-columns: 1fr;
-      min-height: 480px;
+      min-height: 520px;
     }
 
     @media (min-width: 960px) {
-      .code-split {
-        grid-template-columns: 1.35fr 1fr;
+      .vscode-body {
+        grid-template-columns: 1.45fr 1fr;
       }
     }
 
-    .code-lines-panel {
-      padding: 1.25rem;
+    .vscode-editor {
+      background: #1e1e1e;
+      padding: 0.8rem 0;
       font-family: var(--font-mono);
       font-size: 0.84rem;
-      overflow-x: auto;
-      max-height: 600px;
-      border-right: 1px solid var(--border-subtle);
-      background: #080c14;
+      overflow-y: auto;
+      max-height: 620px;
+      border-right: 1px solid #2d2d2d;
     }
 
+    /* Fila de código con Salto de Línea y Wrap automático */
     .code-row {
       display: flex;
       align-items: baseline;
-      gap: 1.25rem;
-      padding: 0.22rem 0.5rem;
-      border-radius: 4px;
+      padding: 0.16rem 0.75rem;
       cursor: pointer;
       user-select: none;
-      transition: background 0.15s ease;
-      white-space: pre;
+      transition: background 0.1s ease;
+      line-height: 1.55;
     }
 
     .code-row:hover {
-      background: rgba(56, 189, 248, 0.08);
+      background: #2a2d2e;
     }
 
     .code-row.active {
-      background: rgba(56, 189, 248, 0.2);
-      box-shadow: inset 3px 0 0 var(--campus-cyan);
+      background: #282e3a;
+      box-shadow: inset 3px 0 0 #007acc;
     }
 
     .code-ln {
-      color: var(--text-dim);
-      width: 2rem;
+      color: #6e7681;
+      width: 2.6rem;
       text-align: right;
       flex-shrink: 0;
+      user-select: none;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      margin-right: 1.15rem;
     }
 
     .code-text {
-      color: #e2e8f0;
       flex: 1;
+      white-space: pre-wrap; /* ¡Salto de línea automático cuando el texto sobrepasa! */
+      word-break: break-word; /* Evita que sobrepase el contenedor o se coma la línea */
+      color: #d4d4d4; /* Color base de texto en VS Code */
     }
 
-    .code-detail-panel {
-      background: var(--bg-card);
+    /* Panel lateral de explicación */
+    .vscode-inspector {
+      background: #252526;
       padding: 1.75rem;
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
       overflow-y: auto;
-      max-height: 600px;
+      max-height: 620px;
+      border-left: 1px solid #1e1e1e;
     }
 
     .detail-badge {
       display: inline-block;
       font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--campus-cyan);
-      background: rgba(56, 189, 248, 0.1);
-      padding: 0.25rem 0.6rem;
+      font-size: 0.74rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      padding: 0.25rem 0.65rem;
       border-radius: 6px;
       align-self: flex-start;
       border: 1px solid rgba(56, 189, 248, 0.25);
@@ -600,27 +644,39 @@
     .detail-heading {
       font-size: 1.15rem;
       font-weight: 800;
-      color: #fff;
+      color: #ffffff;
+      line-height: 1.3;
     }
 
     .detail-body {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: #cccccc;
       line-height: 1.65;
     }
 
     .detail-box-tip {
       background: rgba(34, 197, 94, 0.08);
-      border: 1px solid rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.25);
       border-radius: 8px;
       padding: 0.9rem 1rem;
       font-size: 0.85rem;
       color: #bbf7d0;
     }
 
+    /* Paleta de Sintaxis VS Code Dark+ */
+    .hl-kw { color: #c586c0; font-weight: 600; } /* import, export, from, const, return, if */
+    .hl-type { color: #4ec9b0; } /* Router, Date, Math, Number */
+    .hl-fn { color: #dcdcaa; } /* express(), get(), use(), status(), json() */
+    .hl-str { color: #ce9178; } /* "string literal" */
+    .hl-num { color: #b5cea8; } /* 1, 2, 200, 3000 */
+    .hl-param { color: #9cdcfe; } /* req, res, next, err, id, campers */
+    .hl-cmt { color: #6a9955; font-style: italic; } /* // comment o /* */
+    .hl-op { color: #d4d4d4; } /* =, =>, === */
+    .hl-punc { color: #ffd700; } /* { }, ( ) */
+
     /* Simulador REST Interactivo (Sandbox) */
     .sandbox-container {
-      background: var(--bg-code);
+      background: #0b0f19;
       border: 1px solid var(--border-subtle);
       border-radius: 16px;
       padding: 1.75rem;
@@ -1025,7 +1081,7 @@
           • Usa las flechas <strong>←</strong> y <strong>→</strong> del teclado (o la barra inferior) para avanzar y retroceder.<br>
           • Presiona <strong>M</strong> para cambiar al Modo Lectura Continua.<br>
           • Presiona <strong>T</strong> para ver el índice completo de lecciones.<br>
-          • En las pantallas de código, <strong>haz clic en cualquier línea</strong> para ver la explicación línea por línea.
+          • En las pantallas de código, <strong>haz clic en cualquier línea</strong> para ver la explicación línea por línea coloreada como en VS Code.
         </div>
       </div>
     </section>
@@ -1310,7 +1366,7 @@ export let campers = [
       </div>
     </section>
 
-    <!-- SLIDE 6 (NUEVO): Paso a Paso de Inicialización y Estructura antes del Código -->
+    <!-- SLIDE 6: Paso a Paso de Inicialización y Estructura antes del Código -->
     <section class="slide-item" data-step="6">
       <span class="slide-badge cyan">🛠️ Paso a Paso Inicial</span>
       <h2 class="slide-title">Cómo Iniciar el Proyecto y Crear la Estructura</h2>
@@ -1402,54 +1458,79 @@ campuslands-express-crud/<br>
             • <code>src/data/</code>: Arreglo de campers en memoria (datos volátiles).<br>
             • <code>src/middlewares/</code>: Auditoría, validación de cuerpo y captura de errores.<br>
             • <code>src/routes/</code>: Enrutador con los 5 endpoints del CRUD.<br>
-            👉 <em>¡En la siguiente diapositiva revisaremos el código de cada archivo línea por línea!</em>
+            👉 <em>¡En la siguiente diapositiva revisaremos el código completo de cada archivo con colores de VS Code!</em>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SLIDE 7: Explorador Interactivo Línea a Línea del Código -->
+    <!-- SLIDE 7: Explorador Interactivo Línea a Línea del Código (Estilo VS Code Dark+) -->
     <section class="slide-item" data-step="7">
-      <span class="slide-badge">🔍 Explorador Interactivo</span>
-      <h2 class="slide-title">Explorador de Código Línea a Línea</h2>
+      <span class="slide-badge">🔍 Editor VS Code Interactivo</span>
+      <h2 class="slide-title">Explorador de Código Línea a Línea (Estilo VS Code)</h2>
       <p class="slide-desc">
-        Selecciona una pestaña de archivo y <strong>haz clic en cualquier línea de código</strong> para desplegar en el panel lateral 
-        su explicación técnica, propósito y buenas prácticas de ECMAScript.
+        Todo el código fuente se presenta con el resaltado sintáctico oficial de <strong>VS Code Dark+</strong> y ajuste automático de línea (wrap) 
+        para que ningún texto quede cortado. <strong>Haz clic en cualquier línea</strong> para ver su análisis didáctico.
       </p>
 
-      <div class="code-explorer-container">
-        <!-- Pestañas de archivos -->
-        <div class="code-tabs">
-          <button class="code-tab-btn active" data-file="app">src/app.js</button>
-          <button class="code-tab-btn" data-file="routes">src/routes/campers.routes.js</button>
-          <button class="code-tab-btn" data-file="logger">src/middlewares/logger.js</button>
-          <button class="code-tab-btn" data-file="validator">src/middlewares/validator.js</button>
-          <button class="code-tab-btn" data-file="error">src/middlewares/errorHandler.js</button>
-          <button class="code-tab-btn" data-file="db">src/data/campers.db.js</button>
+      <!-- Ventana estilo VS Code -->
+      <div class="vscode-window">
+        <!-- Pestañas de archivos superiores -->
+        <div class="vscode-tabs-bar">
+          <button class="vscode-tab active" data-file="app">
+            <span class="tab-icon-js">JS</span>
+            <span>app.js</span>
+          </button>
+          <button class="vscode-tab" data-file="routes">
+            <span class="tab-icon-js">JS</span>
+            <span>campers.routes.js</span>
+          </button>
+          <button class="vscode-tab" data-file="logger">
+            <span class="tab-icon-js">JS</span>
+            <span>logger.js</span>
+          </button>
+          <button class="vscode-tab" data-file="validator">
+            <span class="tab-icon-js">JS</span>
+            <span>validator.js</span>
+          </button>
+          <button class="vscode-tab" data-file="error">
+            <span class="tab-icon-js">JS</span>
+            <span>errorHandler.js</span>
+          </button>
+          <button class="vscode-tab" data-file="db">
+            <span class="tab-icon-js">JS</span>
+            <span>campers.db.js</span>
+          </button>
         </div>
 
-        <div class="code-split">
-          <!-- Panel de código fuente con líneas clickeables -->
-          <div class="code-lines-panel" id="codeLinesPanel">
-            <!-- Se inyecta dinámicamente según la pestaña seleccionada -->
+        <!-- Barra de ruta / breadcrumbs -->
+        <div class="vscode-breadcrumbs" id="vscodeBreadcrumbs">
+          <span>campuslands-express-crud</span> &gt; <span>src</span> &gt; <span class="active-crumb" id="activeCrumb">app.js</span>
+        </div>
+
+        <!-- Área de código y panel explicativo -->
+        <div class="vscode-body">
+          <!-- Editor con líneas y wrap automático -->
+          <div class="vscode-editor" id="codeLinesPanel">
+            <!-- Inyectado dinámicamente con resaltado sintáctico completo -->
           </div>
 
-          <!-- Panel de explicación detallada de la línea seleccionada -->
-          <div class="code-detail-panel" id="codeDetailPanel">
-            <span class="detail-badge" id="detailBadge">LÍNEA SELECCIONADA</span>
-            <h3 class="detail-heading" id="detailHeading">Haz clic en una línea de código</h3>
+          <!-- Inspector explicativo lateral -->
+          <div class="vscode-inspector" id="codeDetailPanel">
+            <span class="detail-badge" id="detailBadge">SRC/APP.JS : LÍNEA 1</span>
+            <h3 class="detail-heading" id="detailHeading">Haz clic en cualquier línea de código</h3>
             <div class="detail-body" id="detailBody">
-              Explora el código fuente a la izquierda. Al hacer clic sobre cualquier línea, verás aquí su análisis didáctico completo: qué función cumple en Node.js, parámetros que recibe y errores habituales que debes evitar.
+              Explora el código fuente a la izquierda. Al seleccionar cualquier línea, verás su explicación técnica: qué función cumple en Express y Node.js, parámetros que recibe y buenas prácticas recomendadas.
             </div>
             <div class="detail-box-tip" id="detailTip">
-              💡 <strong>Tip para estudiantes:</strong> En ECMAScript Modules (ESM) siempre debes colocar la extensión <code>.js</code> en tus rutas de importación relativa (ej: <code>./routes/campers.routes.js</code>).
+              💡 <strong>Tip pedagógico:</strong> Las líneas largas cuentan con salto de línea suave (wrap) para que los alumnos lean todo el código sin desbordes de pantalla.
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SLIDE 8 (NUEVO): Ejecución y Pruebas Locales en su Máquina -->
+    <!-- SLIDE 8: Ejecución y Pruebas Locales en su Máquina -->
     <section class="slide-item" data-step="8">
       <span class="slide-badge accent-green">💻 Pruebas en tu Máquina Local</span>
       <h2 class="slide-title">Cómo Correr y Probar la API en tu Computadora</h2>
@@ -1736,8 +1817,8 @@ http://localhost:3000/api/campers
           <span style="color: #38bdf8; font-size: 0.8rem; font-weight: 700;">Setup Terminal</span>
         </li>
         <li class="toc-item" onclick="goToStep(7)">
-          <div><span class="toc-num">07</span><span>Explorador de Código Línea a Línea</span></div>
-          <span style="color: var(--text-dim); font-size: 0.8rem;">Interactividad</span>
+          <div><span class="toc-num">07</span><span>Explorador de Código Línea a Línea (Estilo VS Code)</span></div>
+          <span style="color: #dcdcaa; font-size: 0.8rem; font-weight: 700;">VS Code Dark+</span>
         </li>
         <li class="toc-item" onclick="goToStep(8)">
           <div><span class="toc-num">08</span><span>Ejecución y Pruebas Locales en tu Máquina (cURL)</span></div>
@@ -1760,122 +1841,548 @@ http://localhost:3000/api/campers
 
   <!-- Código JavaScript de la Plataforma Educativa -->
   <script>
-    // --- 1. DATOS DE LOS ARCHIVOS PARA EL EXPLORADOR LÍNEA A LÍNEA ---
-    const fileCodes = {
-      app: [
-        { ln: 1, code: `import express from "express";`, title: "Importación de Express con ESM", desc: "En ECMAScript Modules (ESM) importamos la función constructora de Express utilizando la palabra clave 'import' en lugar del obsoleto 'require'.", tip: "Asegúrate de que package.json tenga 'type': 'module'." },
-        { ln: 2, code: `import { logger } from "./middlewares/logger.js";`, title: "Importación del Middleware Logger", desc: "Importamos de forma nombrada nuestro middleware personalizado de auditoría. Nota el './' y la extensión '.js' obligatoria en ESM.", tip: "Si omites '.js', Node.js en modo ESM lanzará un error ERR_MODULE_NOT_FOUND." },
-        { ln: 3, code: `import { errorHandler } from "./middlewares/errorHandler.js";`, title: "Importación del Middleware de Errores", desc: "Traemos el manejador centralizado de errores que capturará cualquier fallo no controlado.", tip: "Debe montarse siempre al final de la cadena de middlewares." },
-        { ln: 4, code: `import campersRouter from "./routes/campers.routes.js";`, title: "Importación del Enrutador Modular", desc: "Importamos la exportación por defecto de campers.routes.js. Este objeto Router agrupa los 5 endpoints del CRUD.", tip: "Permite desacoplar responsabilidades y evitar un app.js gigante." },
-        { ln: 5, code: ``, title: "Línea vacía", desc: "Separación visual de bloques para mejorar la legibilidad del código.", tip: "Mantén tu código limpio con espacio en blanco intencional." },
-        { ln: 6, code: `const app = express();`, title: "Instanciación de la Aplicación", desc: "Crea la instancia principal de la aplicación Express. Este objeto 'app' gestiona la configuración, middlewares y el servidor HTTP.", tip: "'app' actúa como el corazón del backend." },
-        { ln: 7, code: `const PORT = process.env.PORT || 3000;`, title: "Definición del Puerto", desc: "Toma el puerto asignado por las variables de entorno del servidor (ej. en Dokploy o Render) o por defecto usa el puerto 3000 local.", tip: "Siempre permite que el puerto sea configurable vía process.env." },
-        { ln: 8, code: ``, title: "Línea vacía", desc: "Separador de sección.", tip: "" },
-        { ln: 9, code: `app.use(express.json());`, title: "Middleware Global JSON", desc: "Parsea automáticamente el cuerpo de las peticiones entrantes con encabezado 'Content-Type: application/json' y lo deposita en 'req.body'.", tip: "¡Sin esta línea, req.body será undefined en solicitudes POST y PUT!" },
-        { ln: 10, code: `app.use(logger);`, title: "Montaje del Logger Global", desc: "Registra en consola la estampa de tiempo, método y URL de toda solicitud entrante antes de llegar a los controladores.", tip: "Al usar app.use() sin ruta previa, aplica a todos los verbos y endpoints." },
-        { ln: 11, code: ``, title: "Línea vacía", desc: "Separador de sección.", tip: "" },
-        { ln: 12, code: `app.get("/", (req, res) => { ... });`, title: "Endpoint Raíz de Salud", desc: "Responde con un JSON informativo de bienvenida indicando la documentación de los endpoints del backend.", tip: "Útil para healthchecks de orquestadores y despliegues." },
-        { ln: 13, code: `app.use("/api/campers", campersRouter);`, title: "Montaje del Prefijo de Rutas", desc: "Asigna el prefijo '/api/campers' a todas las rutas declaradas dentro de campersRouter. Por ejemplo, router.get('/') se convierte en GET /api/campers.", tip: "Facilita el versionado de APIs (/api/v1/campers)." },
-        { ln: 14, code: `app.use((req, res) => { res.status(404).json(...); });`, title: "Manejador de Rutas Inexistentes (404)", desc: "Si una petición no coincidió con ninguna ruta anterior, cae en este middleware y devuelve 404 Not Found.", tip: "Siempre debe ir después de todas las rutas válidas." },
-        { ln: 15, code: `app.use(errorHandler);`, title: "Montaje del Middleware de Errores", desc: "Captura excepciones con firma (err, req, res, next). Debe ser OBLIGATORIAMENTE el último app.use().", tip: "Si lo pones antes de las rutas, no podrá atrapar los errores que ocurran en ellas." },
-        { ln: 16, code: `app.listen(PORT, () => { ... });`, title: "Apertura del Puerto de Escucha", desc: "Inicia el servidor HTTP escuchando conexiones en el puerto especificado.", tip: "En entorno de test lo envolvemos con una condición para evitar conflictos de puerto." }
-      ],
-      routes: [
-        { ln: 1, code: `import { Router } from "express";`, title: "Importación del Router", desc: "Extrae la clase Router de Express para generar mini-aplicaciones de rutas modulares e independientes.", tip: "Router es ligero y altamente desacoplable." },
-        { ln: 2, code: `import { campers } from "../data/campers.db.js";`, title: "Importación del Arreglo en Memoria", desc: "Importa el arreglo de campers mutable desde la capa de persistencia.", tip: "En ESM, los módulos importados son enlaces en vivo (live bindings)." },
-        { ln: 3, code: `import { validarCamper } from "../middlewares/validator.js";`, title: "Importación del Middleware Validador", desc: "Trae la función intermediaria que comprobará que el cuerpo traiga 'nombre', 'modulo' y 'nivel'.", tip: "Se inyectará únicamente en las rutas que reciban cuerpo (POST y PUT)." },
-        { ln: 4, code: `const router = Router();`, title: "Creación de la Instancia de Rutas", desc: "Inicializa el enrutador que contendrá las 5 operaciones del CRUD.", tip: "" },
-        { ln: 5, code: `router.get("/", (req, res) => { res.json({ datos: campers }); });`, title: "[GET /] Listar Campers", desc: "Recupera y retorna la totalidad de campers almacenados en el arreglo con estado HTTP 200 OK.", tip: "Operación de lectura idempotente y segura." },
-        { ln: 6, code: `router.get("/:id", (req, res) => { ... });`, title: "[GET /:id] Buscar Camper por ID", desc: "Lee el parámetro de ruta con req.params.id, lo convierte a número entero y usa campers.find(). Si no existe, retorna 404.", tip: "Recuerda validar que el parámetro sea un número válido con isNaN." },
-        { ln: 7, code: `router.post("/", validarCamper, (req, res) => { ... });`, title: "[POST /] Crear Camper", desc: "Primero ejecuta validarCamper. Si todo está correcto, calcula un ID único con Math.max, hace campers.push() y devuelve 201 Created.", tip: "201 Created es el código estándar oficial de REST al crear un recurso." },
-        { ln: 8, code: `router.put("/:id", validarCamper, (req, res) => { ... });`, title: "[PUT /:id] Actualizar Camper", desc: "Busca la posición con findIndex(). Si no existe responde 404. Si existe, reemplaza los datos y retorna 200 OK.", tip: "PUT reemplaza la totalidad del objeto con la nueva carga enviada." },
-        { ln: 9, code: `router.delete("/:id", (req, res) => { ... });`, title: "[DELETE /:id] Eliminar Camper", desc: "Localiza el índice con findIndex() y elimina el elemento mediante campers.splice(indice, 1). Retorna 200 OK y el camper borrado.", tip: "Splice modifica el arreglo original en memoria." },
-        { ln: 10, code: `export default router;`, title: "Exportación del Enrutador", desc: "Exporta el objeto router para ser importado y montado en app.js con app.use().", tip: "Usa export default para el recurso primario del módulo." }
-      ],
-      logger: [
-        { ln: 1, code: `export function logger(req, res, next) {`, title: "Firma del Middleware", desc: "Recibe req (petición), res (respuesta) y next (puntero al siguiente paso en la tubería).", tip: "Todo middleware intermediario debe recibir estos 3 parámetros." },
-        { ln: 2, code: `  const timestamp = new Date().toISOString();`, title: "Estampa de Tiempo ISO", desc: "Genera una cadena de fecha y hora estandarizada en formato UTC para auditoría.", tip: "Permite saber exactamente cuándo ocurrió cada evento." },
-        { ln: 3, code: `  const metodo = req.method;`, title: "Método HTTP", desc: "Obtiene si la petición es GET, POST, PUT, DELETE, etc.", tip: "req.method siempre está en mayúsculas." },
-        { ln: 4, code: `  const url = req.originalUrl || req.url;`, title: "Ruta Solicitada", desc: "Obtiene la URL completa requerida por el cliente (ej: /api/campers/1).", tip: "req.originalUrl conserva la ruta completa aun dentro de routers montados." },
-        { ln: 5, code: `  console.log(\`[\${timestamp}] 📡 \${metodo} -> \${url}\`);`, title: "Salida a Consola", desc: "Escribe la línea de log formateada en la terminal del servidor.", tip: "En producción se suelen usar librerías como Morgan o Winston." },
-        { ln: 6, code: `  next();`, title: "Llamada a next()", desc: "Cede el control al siguiente middleware o controlador de la pila. Sin esto, la petición muere por timeout.", tip: "¡Nunca olvides invocar next() salvo que ya hayas respondido con res.json()!" },
-        { ln: 7, code: `}`, title: "Fin de Función", desc: "Cierre del bloque de la función logger.", tip: "" }
-      ],
-      validator: [
-        { ln: 1, code: `export function validarCamper(req, res, next) {`, title: "Middleware de Validación", desc: "Interrumpe la petición antes de llegar al controlador si faltan datos esenciales en el body.", tip: "Protege la consistencia de los datos en memoria." },
-        { ln: 2, code: `  const { nombre, modulo, nivel } = req.body;`, title: "Desestructuración del Body", desc: "Extrae las propiedades enviadas por el cliente en el cuerpo de la solicitud JSON.", tip: "Requiere que express.json() haya corrido antes." },
-        { ln: 3, code: `  if (!req.body || typeof req.body !== "object") { ... }`, title: "Verificación de Cuerpo Válido", desc: "Comprueba que la petición no venga vacía o con formato no objeto.", tip: "Responde 400 Bad Request si es inválido." },
-        { ln: 4, code: `  if (!nombre || typeof nombre !== "string" || nombre.trim().length === 0) { ... }`, title: "Validación de 'nombre'", desc: "Verifica que el nombre exista, sea texto y no contenga únicamente espacios en blanco.", tip: "Usa trim() para limpiar espacios accidentales." },
-        { ln: 5, code: `  if (!modulo || typeof modulo !== "string") { ... }`, title: "Validación de 'modulo'", desc: "Exige que el módulo esté presente (ej: Node.js, Express, JavaScript).", tip: "" },
-        { ln: 6, code: `  if (!nivel || typeof nivel !== "string") { ... }`, title: "Validación de 'nivel'", desc: "Exige que el nivel esté presente (ej: Básico, Intermedio, Avanzado).", tip: "" },
-        { ln: 7, code: `  next();`, title: "Pase al Controlador", desc: "Como todos los campos cumplieron con la validación, cedemos el control al controlador POST o PUT.", tip: "El controlador ya puede confiar plenamente en los datos." }
-      ],
-      error: [
-        { ln: 1, code: `export function errorHandler(err, req, res, next) {`, title: "Firma de 4 Parámetros (Error)", desc: "En Express, el primer parámetro es 'err'. Si una función tiene 4 parámetros, Express la registra como Error Handler.", tip: "Si eliminas 'next' y dejas solo 3 parámetros, Express NO la tratará como error handler." },
-        { ln: 2, code: `  console.error("🚨 [ERROR GLOBAL CAPTURADO]:", err.message || err);`, title: "Registro del Error", desc: "Imprime la traza o mensaje del fallo en los logs internos del servidor para su análisis.", tip: "No expongas trazas técnicas confidenciales al cliente en producción." },
-        { ln: 3, code: `  const codigoEstado = err.statusCode || 500;`, title: "Determinación del Status", desc: "Utiliza el código de error personalizado si existe, o por defecto asigna 500 Internal Server Error.", tip: "500 indica fallo no esperado en el backend." },
-        { ln: 4, code: `  res.status(codigoEstado).json({ exito: false, error: ... });`, title: "Respuesta JSON Estandarizada", desc: "Retorna un mensaje de error limpio al cliente para que la aplicación frontend sepa cómo reaccionar.", tip: "Evita que la pantalla del usuario se quede colgada." }
-      ],
-      db: [
-        { ln: 1, code: `export let campers = [ ... ];`, title: "Arreglo Mutable Exportado", desc: "Declaramos un arreglo con 'let' y 'export' para que otros módulos puedan leerlo y modificarlo.", tip: "En ESM los live bindings permiten que los cambios se reflejen en los importadores." },
-        { ln: 2, code: `  { id: 1, nombre: "Valeria Gómez", modulo: "Node.js", nivel: "Intermedio" },`, title: "Objeto Semilla 1", desc: "Registro inicial de ejemplo para que la API cuente con datos desde el primer arranque.", tip: "" },
-        { ln: 3, code: `  { id: 2, nombre: "Carlos Morales", modulo: "JavaScript", nivel: "Básico" },`, title: "Objeto Semilla 2", desc: "Registro con id 2.", tip: "" },
-        { ln: 4, code: `  { id: 3, nombre: "Diana Ruiz", modulo: "Express", nivel: "Avanzado" }`, title: "Objeto Semilla 3", desc: "Registro con id 3.", tip: "" },
-        { ln: 5, code: `export function reiniciarCampers() { ... }`, title: "Función de Reseteo", desc: "Restaura el arreglo a sus 3 elementos originales. Muy útil para suites de pruebas y simulaciones.", tip: "Garantiza repetibilidad en tests." }
-      ]
+    // --- 1. ARCHIVOS COMPLETOS (100% LÍNEAS REALES DEL PROYECTO) ---
+    const fileCodesRaw = {
+      app: `/**
+ * Servidor Principal de Express con EcmaScript Modules (ESM)
+ * -----------------------------------------------------------
+ * Este archivo centraliza la inicialización de Express, la configuración de los
+ * middlewares globales, el montaje del enrutador y la apertura del puerto de escucha.
+ */
+
+import express from "express";
+import { logger } from "./middlewares/logger.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
+import campersRouter from "./routes/campers.routes.js";
+
+// 1. Instanciar la aplicación Express
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// 2. Middlewares Globales
+// express.json() parsea solicitudes entrantes con cuerpo en formato application/json
+app.use(express.json());
+
+// Middleware personalizado para auditoría de solicitudes
+app.use(logger);
+
+// 3. Ruta Raíz / Bienvenida (Health check)
+app.get("/", (req, res) => {
+  res.status(200).json({
+    mensaje: "🚀 Bienvenido a la API REST de Campers en Express (Campuslands)",
+    stack: "Node.js + Express + ECMAScript Modules (ESM)",
+    almacenamiento: "Arreglo en memoria (sin base de datos externa)",
+    documentacion_endpoints: {
+      listar_todos: "GET /api/campers",
+      obtener_por_id: "GET /api/campers/:id",
+      crear_nuevo: "POST /api/campers",
+      actualizar: "PUT /api/campers/:id",
+      eliminar: "DELETE /api/campers/:id"
+    }
+  });
+});
+
+// 4. Montaje del Enrutador Modular
+// Todas las rutas de campersRouter responderán bajo el prefijo "/api/campers"
+app.use("/api/campers", campersRouter);
+
+// 5. Manejador para Rutas Inexistentes (404 Not Found)
+app.use((req, res) => {
+  res.status(404).json({
+    error: \`Ruta '\${req.method} \${req.originalUrl}' no encontrada en este servidor.\`
+  });
+});
+
+// 6. Middleware Global de Manejo de Errores (debe ser el último app.use)
+app.use(errorHandler);
+
+// 7. Iniciar el servidor si este archivo se ejecuta directamente
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(\`\\n==================================================\`);
+    console.log(\`🚀 Servidor Express escuchando en http://localhost:\${PORT}\`);
+    console.log(\`📡 Endpoints CRUD disponibles en http://localhost:\${PORT}/api/campers\`);
+    console.log(\`💡 Presiona CTRL+C para detener el servidor\`);
+    console.log(\`==================================================\\n\`);
+  });
+}
+
+export default app;`,
+
+      routes: `import { Router } from "express";
+import { campers } from "../data/campers.db.js";
+import { validarCamper } from "../middlewares/validator.js";
+
+/**
+ * Enrutador Modular de Campers (express.Router)
+ * -----------------------------------------------
+ * express.Router() permite agrupar rutas relacionadas y tratarlas como un mini-módulo
+ * independiente. Este router se montará en app.js bajo el prefijo "/api/campers".
+ */
+const router = Router();
+
+/**
+ * 1. [GET] /api/campers
+ * Obtiene la lista completa de campers registrados en el arreglo en memoria.
+ * Retorna: Código 200 OK y el arreglo JSON.
+ */
+router.get("/", (req, res) => {
+  res.status(200).json({
+    total: campers.length,
+    datos: campers
+  });
+});
+
+/**
+ * 2. [GET] /api/campers/:id
+ * Busca y retorna un camper específico mediante su ID recibido en req.params.
+ * Retorna: Código 200 OK si existe, o 404 Not Found si no se encuentra.
+ */
+router.get("/:id", (req, res) => {
+  const idBuscado = parseInt(req.params.id, 10);
+
+  if (isNaN(idBuscado)) {
+    return res.status(400).json({
+      error: "El parámetro ID debe ser un número entero válido."
+    });
+  }
+
+  const camperEncontrado = campers.find((c) => c.id === idBuscado);
+
+  if (!camperEncontrado) {
+    return res.status(404).json({
+      error: \`No se encontró ningún camper con el ID \${idBuscado}.\`
+    });
+  }
+
+  res.status(200).json({
+    mensaje: "Camper encontrado exitosamente.",
+    camper: camperEncontrado
+  });
+});
+
+/**
+ * 3. [POST] /api/campers
+ * Registra un nuevo camper en el arreglo en memoria.
+ * Aplica el middleware "validarCamper" antes de llegar al controlador.
+ * Retorna: Código 201 Created y el objeto camper recién creado.
+ */
+router.post("/", validarCamper, (req, res) => {
+  const { nombre, modulo, nivel } = req.body;
+
+  // Generación de ID autoincremental seguro basado en el máximo existente
+  const nuevoId = campers.length > 0 ? Math.max(...campers.map((c) => c.id)) + 1 : 1;
+
+  const nuevoCamper = {
+    id: nuevoId,
+    nombre: nombre.trim(),
+    modulo: modulo.trim(),
+    nivel: nivel.trim()
+  };
+
+  campers.push(nuevoCamper);
+
+  res.status(201).json({
+    mensaje: "Camper registrado exitosamente en memoria.",
+    camper: nuevoCamper
+  });
+});
+
+/**
+ * 4. [PUT] /api/campers/:id
+ * Actualiza los datos de un camper existente buscando por su ID.
+ * Aplica el middleware "validarCamper" para verificar la integridad del cuerpo.
+ * Retorna: Código 200 OK con el camper modificado, o 404 Not Found si no existe.
+ */
+router.put("/:id", validarCamper, (req, res) => {
+  const idBuscado = parseInt(req.params.id, 10);
+
+  if (isNaN(idBuscado)) {
+    return res.status(400).json({
+      error: "El parámetro ID debe ser un número entero válido."
+    });
+  }
+
+  const indice = campers.findIndex((c) => c.id === idBuscado);
+
+  if (indice === -1) {
+    return res.status(404).json({
+      error: \`No es posible actualizar: No existe camper con el ID \${idBuscado}.\`
+    });
+  }
+
+  const { nombre, modulo, nivel } = req.body;
+
+  campers[indice] = {
+    id: idBuscado,
+    nombre: nombre.trim(),
+    modulo: modulo.trim(),
+    nivel: nivel.trim()
+  };
+
+  res.status(200).json({
+    mensaje: \`Camper con ID \${idBuscado} actualizado exitosamente.\`,
+    camper: campers[indice]
+  });
+});
+
+/**
+ * 5. [DELETE] /api/campers/:id
+ * Elimina un camper del arreglo en memoria según su ID.
+ * Retorna: Código 200 OK con el objeto eliminado, o 404 Not Found si no existe.
+ */
+router.delete("/:id", (req, res) => {
+  const idBuscado = parseInt(req.params.id, 10);
+
+  if (isNaN(idBuscado)) {
+    return res.status(400).json({
+      error: "El parámetro ID debe ser un número entero válido."
+    });
+  }
+
+  const indice = campers.findIndex((c) => c.id === idBuscado);
+
+  if (indice === -1) {
+    return res.status(404).json({
+      error: \`No es posible eliminar: No existe camper con el ID \${idBuscado}.\`
+    });
+  }
+
+  // Extraer y remover el elemento del arreglo con splice
+  const [camperEliminado] = campers.splice(indice, 1);
+
+  res.status(200).json({
+    mensaje: \`Camper con ID \${idBuscado} eliminado exitosamente.\`,
+    camper: camperEliminado
+  });
+});
+
+export default router;`,
+
+      logger: `/**
+ * Middleware de Registro y Auditoría (Logger)
+ * -------------------------------------------
+ * Los middlewares en Express forman una tubería (pipeline).
+ * Cada petición HTTP que llega al servidor atraviesa este middleware antes
+ * de alcanzar los enrutadores específicos.
+ * 
+ * Funciones de este middleware:
+ * 1. Obtener la estampa de tiempo actual (ISO).
+ * 2. Extraer el método HTTP (GET, POST, etc.) y la URL solicitada.
+ * 3. Imprimir el registro en la consola del servidor.
+ * 4. Llamar a next() para transferir el control al siguiente middleware.
+ * 
+ * ⚠️ IMPORTANTE: Si olvidas invocar next(), la petición quedará congelada
+ * y el cliente esperará hasta agotar el tiempo límite (timeout).
+ */
+
+export function logger(req, res, next) {
+  const timestamp = new Date().toISOString();
+  const metodo = req.method;
+  const url = req.originalUrl || req.url;
+
+  console.log(\`[\${timestamp}] 📡 \${metodo} -> \${url}\`);
+
+  // Pasar el control al siguiente eslabón de la cadena
+  next();
+}`,
+
+      validator: `/**
+ * Middleware de Validación de Campers
+ * ------------------------------------
+ * Un middleware es una función intermediaria que tiene acceso a los objetos:
+ * - req: Petición entrante
+ * - res: Objeto de respuesta
+ * - next: Función para pasar el control al siguiente middleware o controlador
+ * 
+ * Este middleware valida que el cuerpo de la petición contenga los datos
+ * obligatorios antes de permitir que la ruta procese la creación o edición.
+ */
+
+export function validarCamper(req, res, next) {
+  const { nombre, modulo, nivel } = req.body;
+
+  // 1. Verificar existencia del cuerpo de la petición
+  if (!req.body || typeof req.body !== "object") {
+    return res.status(400).json({
+      error: "Se requiere un cuerpo JSON válido en la petición."
+    });
+  }
+
+  // 2. Validar presencia y formato de cada campo obligatorio
+  if (!nombre || typeof nombre !== "string" || nombre.trim().length === 0) {
+    return res.status(400).json({
+      error: "El campo 'nombre' es obligatorio y debe ser una cadena de texto no vacía."
+    });
+  }
+
+  if (!modulo || typeof modulo !== "string" || modulo.trim().length === 0) {
+    return res.status(400).json({
+      error: "El campo 'modulo' es obligatorio (ej: Node.js, Express, JavaScript)."
+    });
+  }
+
+  if (!nivel || typeof nivel !== "string" || nivel.trim().length === 0) {
+    return res.status(400).json({
+      error: "El campo 'nivel' es obligatorio (ej: Básico, Intermedio, Avanzado)."
+    });
+  }
+
+  // 3. Si todas las validaciones pasaron con éxito, invocamos next()
+  next();
+}`,
+
+      error: `/**
+ * Middleware Global de Manejo de Errores
+ * ---------------------------------------
+ * En Express, un middleware de error se distingue OBLIGATORIAMENTE por tener
+ * exactamente 4 parámetros en su firma: (err, req, res, next).
+ * 
+ * Si defines la función con solo 3 parámetros, Express la tratará como un middleware
+ * normal y no interceptará las excepciones lanzadas con next(error) o throw.
+ * 
+ * Funciones de este middleware:
+ * 1. Capturar cualquier error no controlado que ocurra en la aplicación.
+ * 2. Imprimir el detalle técnico del error en los logs del servidor para depuración.
+ * 3. Responder al cliente con un estado HTTP 500 (Internal Server Error) y un formato
+ *    JSON seguro sin exponer trazas confidenciales en producción.
+ */
+
+export function errorHandler(err, req, res, next) {
+  console.error("🚨 [ERROR GLOBAL CAPTURADO]:", err.message || err);
+
+  const codigoEstado = err.statusCode || 500;
+  const mensajeRespuesta = err.message || "Ocurrió un error interno en el servidor.";
+
+  res.status(codigoEstado).json({
+    exito: false,
+    error: {
+      codigo: codigoEstado,
+      mensaje: mensajeRespuesta
+    }
+  });
+}`,
+
+      db: `/**
+ * Base de Datos en Memoria (Arreglo JavaScript Nativo)
+ * -----------------------------------------------------
+ * En este ejercicio pedagógico no utilizamos una base de datos externa (como PostgreSQL o MongoDB).
+ * En su lugar, utilizamos un arreglo mutable exportado mediante ECMAScript Modules (ESM).
+ * 
+ * Cada elemento representa a un "Camper" con las propiedades:
+ * - id: Identificador numérico único
+ * - nombre: Nombre completo del estudiante
+ * - modulo: Tecnología o materia en curso
+ * - nivel: Grado de avance (Básico, Intermedio, Avanzado)
+ */
+
+export let campers = [
+  { id: 1, nombre: "Valeria Gómez", modulo: "Node.js", nivel: "Intermedio" },
+  { id: 2, nombre: "Carlos Morales", modulo: "JavaScript", nivel: "Básico" },
+  { id: 3, nombre: "Diana Ruiz", modulo: "Express", nivel: "Avanzado" }
+];
+
+/**
+ * Función auxiliar para restablecer los datos iniciales (útil para pruebas y demostraciones).
+ */
+export function reiniciarCampers() {
+  campers = [
+    { id: 1, nombre: "Valeria Gómez", modulo: "Node.js", nivel: "Intermedio" },
+    { id: 2, nombre: "Carlos Morales", modulo: "JavaScript", nivel: "Básico" },
+    { id: 3, nombre: "Diana Ruiz", modulo: "Express", nivel: "Avanzado" }
+  ];
+  return campers;
+}`
     };
 
-    // --- 2. GESTIÓN DEL VISOR DE CÓDIGO INTERACTIVO ---
+    // Breadcrumbs correspondientes a cada archivo
+    const filePaths = {
+      app: "campuslands-express-crud > src > app.js",
+      routes: "campuslands-express-crud > src > routes > campers.routes.js",
+      logger: "campuslands-express-crud > src > middlewares > logger.js",
+      validator: "campuslands-express-crud > src > middlewares > validator.js",
+      error: "campuslands-express-crud > src > middlewares > errorHandler.js",
+      db: "campuslands-express-crud > src > data > campers.db.js"
+    };
+
+    // --- 2. MOTOR DE RESALTADO SINTÁCTICO ESTILO VS CODE DARK+ ---
+    function highlightVSCode(codeLine) {
+      if (!codeLine) return "&nbsp;";
+
+      // 1. Escapar caracteres HTML básicos
+      let text = codeLine
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      // Comentarios de una línea (// ...)
+      if (text.trim().startsWith("//")) {
+        return `<span class="hl-cmt">${text}</span>`;
+      }
+      // Comentarios JSDoc (* ...)
+      if (text.trim().startsWith("*") || text.trim().startsWith("/**") || text.trim().startsWith("*/")) {
+        return `<span class="hl-cmt">${text}</span>`;
+      }
+
+      // 2. Resaltar Cadenas de Texto ("...", '...', `...`)
+      text = text.replace(/(`[^`]*`|"[^"]*"|'[^']*')/g, '<span class="hl-str">$1</span>');
+
+      // 3. Palabras Clave de ECMAScript (Keywords)
+      text = text.replace(/\b(import|export|from|default|const|let|function|return|if|else|new|typeof)\b/g, '<span class="hl-kw">$1</span>');
+
+      // 4. Clases y Tipos Globales
+      text = text.replace(/\b(Router|Date|Math|Number|JSON)\b/g, '<span class="hl-type">$1</span>');
+
+      // 5. Métodos y Funciones
+      text = text.replace(/\b(express|use|get|post|put|delete|listen|status|json|find|push|findIndex|splice|trim|log|error|parseInt|isNaN|map|reiniciarCampers|validarCamper|logger|errorHandler)\b(?=\s*\()/g, '<span class="hl-fn">$1</span>');
+
+      // 6. Variables y Parámetros
+      text = text.replace(/\b(req|res|next|err|c|PORT|app|router|campers|id|nombre|modulo|nivel|nuevoId|nuevoCamper|idBuscado|camperEncontrado|camperEliminado|indice|timestamp|metodo|url|codigoEstado|mensajeRespuesta)\b/g, '<span class="hl-param">$1</span>');
+
+      // 7. Números
+      text = text.replace(/\b(\d+)\b/g, '<span class="hl-num">$1</span>');
+
+      // 8. Operadores y Llaves coloreadas (Bracket Pair Colorization)
+      text = text.replace(/(=&gt;|===|!==|==|!=|=|\+|\*|\/|\|\||&&)/g, '<span class="hl-op">$1</span>');
+
+      return text;
+    }
+
+    // --- 3. DICCIONARIO DIDÁCTICO DE LÍNEAS DE CÓDIGO ---
+    function obtenerExplicacionLinea(fileKey, ln, codeText) {
+      const clean = codeText.trim();
+
+      if (!clean) {
+        return {
+          title: "Línea en Blanco",
+          desc: "Espacio en blanco visual para separar bloques lógicos y mejorar la legibilidad del código para el equipo.",
+          tip: "Mantén un estilo consistente en todo el proyecto."
+        };
+      }
+      if (clean.startsWith("//") || clean.startsWith("/*") || clean.startsWith("*")) {
+        return {
+          title: "Comentario Pedagógico / Documentación JSDoc",
+          desc: "Comentario descriptivo en el código. Los comentarios son ignorados por el motor V8 de Node.js en tiempo de ejecución, pero guían a los estudiantes sobre el propósito del bloque.",
+          tip: "En proyectos reales de Node.js, documenta los parámetros de las funciones y los códigos HTTP esperados."
+        };
+      }
+
+      // Archivo: app.js
+      if (fileKey === "app") {
+        if (clean.includes("import express")) return { title: "Importación de Express", desc: "Carga la librería Express usando ESM ('import') en lugar del formato CommonJS ('require').", tip: "Requiere que package.json tenga 'type': 'module'." };
+        if (clean.includes("import { logger }")) return { title: "Importación del Middleware de Registro", desc: "Trae el middleware personalizado 'logger'. Nota el uso obligatorio de la extensión '.js' al final de la ruta relativa.", tip: "Si omites '.js', Node.js en modo ESM arrojará un error de módulo no encontrado." };
+        if (clean.includes("import { errorHandler }")) return { title: "Importación del Manejador de Errores", desc: "Importa el middleware centralizado para atrapar fallos no controlados sin tumbar el servidor.", tip: "Siempre debe ser el último middleware montado." };
+        if (clean.includes("import campersRouter")) return { title: "Importación del Router Modular", desc: "Importa el conjunto de rutas de campers desde su archivo modular desacoplado.", tip: "Desacopla la lógica de endpoints para no saturar app.js." };
+        if (clean.includes("const app = express()")) return { title: "Instanciación de la Aplicación", desc: "Inicializa la aplicación principal de Express que gestiona el servidor, los middlewares y las rutas.", tip: "El objeto 'app' es el punto neurálgico de todo el backend." };
+        if (clean.includes("const PORT")) return { title: "Configuración del Puerto", desc: "Obtiene el puerto desde variables de entorno (process.env.PORT) o asigna el 3000 por defecto.", tip: "Permite que tu app funcione en local (3000) o en servidores de nube sin cambiar código." };
+        if (clean.includes("app.use(express.json())")) return { title: "Middleware Global JSON", desc: "Parsea automáticamente las peticiones entrantes con encabezado 'Content-Type: application/json' y coloca el objeto resultante en 'req.body'.", tip: "¡Sin esta línea, req.body será undefined en solicitudes POST y PUT!" };
+        if (clean.includes("app.use(logger)")) return { title: "Montaje del Logger", desc: "Registra en la consola del servidor la hora, método HTTP y URL de absolutamente todas las peticiones.", tip: "Se ejecuta antes de los enrutadores para auditar todo el tráfico." };
+        if (clean.includes('app.get("/",')) return { title: "Endpoint Raíz de Salud", desc: "Ruta de bienvenida que devuelve un JSON informativo para verificar que el servidor esté vivo y funcionando.", tip: "Útil para healthchecks de monitoreo." };
+        if (clean.includes('app.use("/api/campers"')) return { title: "Montaje del Enrutador Modular", desc: "Asigna el prefijo '/api/campers' a todas las rutas de campersRouter.", tip: "Cualquier ruta dentro del router comenzará con /api/campers." };
+        if (clean.includes("res.status(404)")) return { title: "Captura de Rutas Inexistentes (404)", desc: "Si una petición no coincidió con ninguna ruta previa, este middleware responde con código 404 Not Found.", tip: "Debe ubicarse después de todas las rutas válidas." };
+        if (clean.includes("app.use(errorHandler)")) return { title: "Montaje del Error Handler", desc: "Atrapa excepciones globales con la firma de 4 parámetros (err, req, res, next).", tip: "Obligatoriamente debe ser el último app.use()." };
+        if (clean.includes("app.listen(")) return { title: "Apertura del Servidor HTTP", desc: "Pone al servidor a escuchar solicitudes entrantes en el puerto configurado (ej: 3000).", tip: "Usa console.log para mostrar a los estudiantes dónde está corriendo." };
+      }
+
+      // Archivo: campers.routes.js
+      if (fileKey === "routes") {
+        if (clean.includes("const router = Router()")) return { title: "Instanciación del Enrutador", desc: "Crea una mini-aplicación de Express aislada para gestionar exclusivamente los endpoints de campers.", tip: "Permite modularizar por entidad (campers, trainers, cursos)." };
+        if (clean.includes('router.get("/",')) return { title: "[GET /] Listar Todos los Campers", desc: "Endpoint de lectura que devuelve la totalidad del arreglo de campers con código 200 OK.", tip: "Operación idempotente que no modifica datos." };
+        if (clean.includes('router.get("/:id"')) return { title: "[GET /:id] Buscar Camper por ID", desc: "Lee el parámetro de ruta ':id' usando req.params.id, lo convierte a número entero y busca en el arreglo con .find().", tip: "Si el camper no existe, debe retornar 404 Not Found." };
+        if (clean.includes('router.post("/", validarCamper')) return { title: "[POST /] Crear Nuevo Camper", desc: "Aplica primero el middleware 'validarCamper'. Si es válido, calcula un nuevo ID único y añade el camper con .push().", tip: "Retorna código 201 Created según el estándar REST." };
+        if (clean.includes('router.put("/:id", validarCamper')) return { title: "[PUT /:id] Actualizar Camper", desc: "Busca la posición con .findIndex(). Si existe, reemplaza sus campos con el nuevo cuerpo validado y responde 200 OK.", tip: "PUT reemplaza los datos del recurso existente." };
+        if (clean.includes('router.delete("/:id"')) return { title: "[DELETE /:id] Eliminar Camper", desc: "Encuentra el índice y remueve el objeto del arreglo usando .splice(indice, 1). Retorna 200 OK.", tip: "Retorna el camper eliminado para confirmación visual." };
+      }
+
+      // Archivo: logger.js
+      if (fileKey === "logger") {
+        if (clean.includes("export function logger")) return { title: "Firma del Middleware", desc: "Recibe los 3 objetos clave: req (petición), res (respuesta) y next (puntero a la siguiente función).", tip: "Todo middleware intermediario debe recibir (req, res, next)." };
+        if (clean.includes("new Date().toISOString()")) return { title: "Estampa de Tiempo ISO", desc: "Genera una marca de tiempo universal para saber en qué segundo exacto ocurrió la petición.", tip: "Estándar UTC para registros y auditoría." };
+        if (clean.includes("next()")) return { title: "Llamada a next()", desc: "Transfiere el control al siguiente middleware o controlador. ¡Sin esta llamada la petición se congela!", tip: "Nunca olvides next() a menos que ya hayas respondido al cliente." };
+      }
+
+      // Archivo: validator.js
+      if (fileKey === "validator") {
+        if (clean.includes("const { nombre, modulo, nivel } = req.body")) return { title: "Extracción del Body", desc: "Desestructura las propiedades esperadas que el cliente envió en formato JSON.", tip: "Requiere que express.json() haya corrido antes." };
+        if (clean.includes("res.status(400)")) return { title: "Respuesta 400 Bad Request", desc: "Si falta algún campo obligatorio, corta la petición inmediatamente y devuelve código 400.", tip: "Protege la integridad de los datos antes de tocar el arreglo." };
+        if (clean.includes("next()")) return { title: "Aprobación de la Validación", desc: "Como todos los campos obligatorios están presentes y válidos, permite el paso hacia la ruta.", tip: "El controlador de la ruta ya puede operar con total confianza." };
+      }
+
+      // Archivo: errorHandler.js
+      if (fileKey === "error") {
+        if (clean.includes("(err, req, res, next)")) return { title: "Firma de Error Handler (4 Parámetros)", desc: "En Express, una función con exactamente 4 parámetros es reconocida automáticamente como manejador de errores.", tip: "Si quitas 'next' y dejas 3 parámetros, Express no lo tratará como manejador de errores." };
+        if (clean.includes("res.status(codigoEstado)")) return { title: "Respuesta de Error 500", desc: "Devuelve un código de estado 500 o personalizado en JSON para que el cliente no se quede esperando.", tip: "Evita que el servidor se caiga ante fallos inesperados." };
+      }
+
+      // Archivo: campers.db.js
+      if (fileKey === "db") {
+        if (clean.includes("export let campers = [")) return { title: "Arreglo en Memoria Mutable", desc: "Declara el arreglo semilla con 'let' y 'export' para que otros módulos puedan leerlo y modificarlo.", tip: "En ESM los enlaces de importación son en vivo (live bindings)." };
+        if (clean.includes("reiniciarCampers")) return { title: "Función de Reseteo", desc: "Restaura el arreglo a sus 3 registros iniciales. Muy útil para pruebas automatizadas.", tip: "Garantiza repetibilidad en demostraciones." };
+      }
+
+      // Explicación genérica contextual
+      return {
+        title: `Línea ${ln}: ${clean.substring(0, 32)}...`,
+        desc: `Esta línea forma parte de la lógica de <strong>${filePaths[fileKey] || fileKey}</strong>. Define variables, estructuras de control o sentencias de flujo de datos en ECMAScript moderno.`,
+        tip: "Haz clic en las demás líneas para comprender el recorrido completo del archivo."
+      };
+    }
+
+    // --- 4. GESTIÓN DEL VISOR DE CÓDIGO INTERACTIVO ---
     let currentActiveFile = "app";
 
     function renderCodeFile(fileKey) {
       currentActiveFile = fileKey;
-      const lines = fileCodes[fileKey] || [];
+      const rawText = fileCodesRaw[fileKey] || "";
+      const lines = rawText.split("\n");
       const panel = document.getElementById("codeLinesPanel");
       panel.innerHTML = "";
 
-      lines.forEach((item, index) => {
+      // Actualizar breadcrumbs
+      document.getElementById("vscodeBreadcrumbs").innerHTML = `<span>campuslands-express-crud</span> &gt; <span>src</span> &gt; <span class="active-crumb">${fileKey === 'app' ? 'app.js' : fileKey === 'routes' ? 'routes/campers.routes.js' : fileKey === 'db' ? 'data/campers.db.js' : 'middlewares/' + fileKey + '.js'}</span>`;
+
+      lines.forEach((codeLine, index) => {
+        const ln = index + 1;
         const row = document.createElement("div");
         row.className = "code-row" + (index === 0 ? " active" : "");
-        row.innerHTML = `<span class="code-ln">${item.ln}</span><span class="code-text">${escapeHtml(item.code)}</span>`;
-        row.onclick = () => selectCodeLine(fileKey, index, row);
+
+        const highlightedHTML = highlightVSCode(codeLine);
+
+        row.innerHTML = `<span class="code-ln">${ln}</span><span class="code-text">${highlightedHTML}</span>`;
+        row.onclick = () => selectCodeLine(fileKey, ln, codeLine, row);
         panel.appendChild(row);
       });
 
       // Seleccionar primera línea por defecto
       if (lines.length > 0) {
-        updateCodeDetail(lines[0]);
+        updateCodeDetail(fileKey, 1, lines[0]);
       }
     }
 
-    function selectCodeLine(fileKey, index, rowEl) {
+    function selectCodeLine(fileKey, ln, codeLine, rowEl) {
       document.querySelectorAll(".code-row").forEach(r => r.classList.remove("active"));
       rowEl.classList.add("active");
-      const item = fileCodes[fileKey][index];
-      updateCodeDetail(item);
+      updateCodeDetail(fileKey, ln, codeLine);
     }
 
-    function updateCodeDetail(item) {
-      document.getElementById("detailBadge").textContent = `LÍNEA ${item.ln}`;
-      document.getElementById("detailHeading").textContent = item.title;
-      document.getElementById("detailBody").innerHTML = item.desc;
-      document.getElementById("detailTip").innerHTML = `💡 <strong>Consejo:</strong> ${item.tip || "Revisa siempre la sintaxis y los tipos de datos."}`;
+    function updateCodeDetail(fileKey, ln, codeLine) {
+      const info = obtenerExplicacionLinea(fileKey, ln, codeLine);
+      document.getElementById("detailBadge").textContent = `${fileKey.toUpperCase()}.JS : LÍNEA ${ln}`;
+      document.getElementById("detailHeading").textContent = info.title;
+      document.getElementById("detailBody").innerHTML = info.desc;
+      document.getElementById("detailTip").innerHTML = `💡 <strong>Consejo:</strong> ${info.tip}`;
     }
 
-    function escapeHtml(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-
-    // Configurar clics en pestañas de código
-    document.querySelectorAll(".code-tab-btn").forEach(btn => {
+    // Configurar clics en pestañas estilo VS Code
+    document.querySelectorAll(".vscode-tab").forEach(btn => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".code-tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".vscode-tab").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         renderCodeFile(btn.dataset.file);
       });
     });
 
-    // --- 3. SIMULADOR REST INTERACTIVO (SANDBOX EN VIVO) ---
+    // --- 5. SIMULADOR REST INTERACTIVO (SANDBOX EN VIVO) ---
     let simCampers = [
       { id: 1, nombre: "Valeria Gómez", modulo: "Node.js", nivel: "Intermedio" },
       { id: 2, nombre: "Carlos Morales", modulo: "JavaScript", nivel: "Básico" },
@@ -2093,6 +2600,10 @@ http://localhost:3000/api/campers
       });
     }
 
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
     function mostrarToast(msg) {
       const toast = document.getElementById("toastMsg");
       toast.textContent = msg;
@@ -2100,7 +2611,7 @@ http://localhost:3000/api/campers
       setTimeout(() => { toast.style.display = "none"; }, 2500);
     }
 
-    // --- 4. GESTIÓN DE NAVEGACIÓN Y SLIDES ---
+    // --- 6. GESTIÓN DE NAVEGACIÓN Y SLIDES ---
     let currentStep = 1;
     const totalSteps = 10;
 
