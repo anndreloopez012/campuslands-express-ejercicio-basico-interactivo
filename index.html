@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Express.js & Node.js con ECMAScript Modules | Guía Interactiva • Campuslands</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-surface: #0f1523;
+      --bg-card: #151d30;
+      --bg-code: #0b0f1a;
+      --border-subtle: #1e293b;
+      --border-accent: rgba(56, 189, 248, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --node-green: #22c55e;
+      --node-green-glow: rgba(34, 197, 94, 0.25);
+      --campus-cyan: #38bdf8;
+      --campus-purple: #a855f7;
+      --campus-amber: #f59e0b;
+      --campus-red: #ef4444;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --transition-speed: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Header Superior */
+    header.deck-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(15, 21, 35, 0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      z-index: 100;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+      color: #050a14;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-sub {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .brand-sub { display: inline; }
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .btn-action {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all var(--transition-speed);
+      font-family: inherit;
+      text-decoration: none;
+    }
+
+    .btn-action:hover {
+      background: #1e293b;
+      border-color: var(--campus-cyan);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-action.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--campus-cyan);
+      color: var(--campus-cyan);
+    }
+
+    .progress-bar-container {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 99;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 10%;
+      background: linear-gradient(90deg, var(--node-green), var(--campus-cyan));
+      box-shadow: 0 0 10px var(--node-green-glow);
+      transition: width 0.3s ease;
+    }
+
+    /* Contenedor Principal */
+    main.presentation-wrapper {
+      margin-top: 68px;
+      min-height: calc(100vh - 68px - 72px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    /* Modo Diapositivas */
+    body.mode-slides .slide-item {
+      display: none;
+      width: 100%;
+      max-width: 1220px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 2.75rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+      animation: fadeInSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      position: relative;
+    }
+
+    body.mode-slides .slide-item.active {
+      display: block;
+    }
+
+    /* Modo Documento Continuo */
+    body.mode-doc main.presentation-wrapper {
+      display: block;
+      max-width: 1100px;
+      margin: 80px auto 40px auto;
+      padding: 1rem;
+    }
+
+    body.mode-doc .slide-item {
+      display: block;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.35);
+    }
+
+    body.mode-doc .slide-nav-dock {
+      display: none;
+    }
+
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Insignias y Tipografía */
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border-radius: 9999px;
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--node-green);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      margin-bottom: 1.25rem;
+    }
+
+    .slide-badge.cyan {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--campus-cyan);
+      border-color: rgba(56, 189, 248, 0.25);
+    }
+
+    .slide-badge.purple {
+      background: rgba(168, 85, 247, 0.12);
+      color: var(--campus-purple);
+      border-color: rgba(168, 85, 247, 0.25);
+    }
+
+    .slide-badge.amber {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--campus-amber);
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+
+    .slide-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: -0.025em;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 960px;
+    }
+
+    /* Grillas y Cajas de Información */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (min-width: 768px) {
+      .grid-2 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+      .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .card-info {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1.5rem;
+      position: relative;
+      transition: all var(--transition-speed);
+    }
+
+    .card-info:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+    }
+
+    .card-info.accent-green { border-left: 4px solid var(--node-green); }
+    .card-info.accent-cyan { border-left: 4px solid var(--campus-cyan); }
+    .card-info.accent-purple { border-left: 4px solid var(--campus-purple); }
+    .card-info.accent-amber { border-left: 4px solid var(--campus-amber); }
+    .card-info.accent-red { border-left: 4px solid var(--campus-red); }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-text {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* Diagrama de Pipeline de Middlewares */
+    .pipeline-container {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .pipeline-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem 0;
+    }
+
+    .pipeline-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 0.8rem 1.1rem;
+      border-radius: 10px;
+      text-align: center;
+      position: relative;
+      transition: all var(--transition-speed);
+    }
+
+    .pipeline-step:hover {
+      border-color: var(--campus-cyan);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+    }
+
+    .pipeline-step .step-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .pipeline-step .step-sub {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .pipeline-arrow {
+      color: var(--campus-cyan);
+      font-weight: 900;
+      font-size: 1.25rem;
+    }
+
+    /* Tablas Didácticas */
+    .table-custom {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: var(--bg-card);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .table-custom th, .table-custom td {
+      padding: 0.85rem 1.15rem;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .table-custom th {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .table-custom tr:not(:last-child) td {
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .table-custom tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge-method {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+    }
+
+    .badge-method.get { background: rgba(34, 197, 94, 0.2); color: var(--node-green); border: 1px solid var(--node-green); }
+    .badge-method.post { background: rgba(56, 189, 248, 0.2); color: var(--campus-cyan); border: 1px solid var(--campus-cyan); }
+    .badge-method.put { background: rgba(245, 158, 11, 0.2); color: var(--campus-amber); border: 1px solid var(--campus-amber); }
+    .badge-method.delete { background: rgba(239, 68, 68, 0.2); color: var(--campus-red); border: 1px solid var(--campus-red); }
+
+    .badge-status {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+    }
+
+    .badge-status.s200 { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+    .badge-status.s201 { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .badge-status.s400 { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .badge-status.s404 { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .badge-status.s500 { background: rgba(225, 29, 72, 0.2); color: #fda4af; }
+
+    /* Explorador de Código Línea a Línea */
+    .code-explorer-container {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      background: #060910;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.4rem 0.75rem;
+      gap: 0.4rem;
+    }
+
+    .code-tab-btn {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+    }
+
+    .code-tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .code-tab-btn.active {
+      color: var(--campus-cyan);
+      background: rgba(56, 189, 248, 0.12);
+      font-weight: 700;
+    }
+
+    .code-split {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 480px;
+    }
+
+    @media (min-width: 960px) {
+      .code-split {
+        grid-template-columns: 1.35fr 1fr;
+      }
+    }
+
+    .code-lines-panel {
+      padding: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      overflow-x: auto;
+      max-height: 600px;
+      border-right: 1px solid var(--border-subtle);
+      background: #080c14;
+    }
+
+    .code-row {
+      display: flex;
+      align-items: baseline;
+      gap: 1.25rem;
+      padding: 0.22rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s ease;
+      white-space: pre;
+    }
+
+    .code-row:hover {
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .code-row.active {
+      background: rgba(56, 189, 248, 0.2);
+      box-shadow: inset 3px 0 0 var(--campus-cyan);
+    }
+
+    .code-ln {
+      color: var(--text-dim);
+      width: 2rem;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .code-text {
+      color: #e2e8f0;
+      flex: 1;
+    }
+
+    .code-detail-panel {
+      background: var(--bg-card);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      overflow-y: auto;
+      max-height: 600px;
+    }
+
+    .detail-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--campus-cyan);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      align-self: flex-start;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .detail-heading {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .detail-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .detail-box-tip {
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      font-size: 0.85rem;
+      color: #bbf7d0;
+    }
+
+    .detail-box-warning {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      font-size: 0.85rem;
+      color: #fde68a;
+    }
+
+    /* Simulador REST Interactivo (Sandbox) */
+    .sandbox-container {
+      background: var(--bg-code);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .sandbox-preset-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn-preset {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-preset:hover {
+      border-color: var(--campus-cyan);
+      transform: translateY(-1px);
+    }
+
+    .sandbox-url-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .sandbox-url-bar {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .select-method {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .input-url {
+      flex: 1;
+      background: #050811;
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-family: var(--font-mono);
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .input-url:focus {
+      border-color: var(--campus-cyan);
+    }
+
+    .btn-send {
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      color: #050a14;
+      border: none;
+      font-weight: 800;
+      padding: 0.65rem 1.4rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-send:hover {
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .sandbox-panels {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 900px) {
+      .sandbox-panels {
+        grid-template-columns: 1fr 1.2fr;
+      }
+    }
+
+    .sandbox-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .sandbox-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.5rem;
+    }
+
+    .textarea-body {
+      width: 100%;
+      height: 120px;
+      background: #060910;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.75rem;
+      outline: none;
+      resize: vertical;
+    }
+
+    .output-json {
+      background: #050811;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #38bdf8;
+      max-height: 220px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Tabla Visual de Memoria */
+    .memory-table-wrap {
+      background: #080c14;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    /* Barra de Navegación Inferior Flotante */
+    .slide-nav-dock {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 21, 35, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9999px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      z-index: 90;
+    }
+
+    .dock-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+      font-weight: 800;
+    }
+
+    .dock-btn:hover:not(:disabled) {
+      background: var(--campus-cyan);
+      color: #050a14;
+      transform: scale(1.05);
+    }
+
+    .dock-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .dock-counter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* Modal de Tabla de Contenidos (TOC) */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 2rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 0.75rem;
+    }
+
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .toc-item {
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all var(--transition-speed);
+    }
+
+    .toc-item:hover {
+      border-color: var(--campus-cyan);
+      background: #1e293b;
+      transform: translateX(4px);
+    }
+
+    .toc-item.current {
+      border-color: var(--node-green);
+      background: rgba(34, 197, 94, 0.1);
+    }
+
+    .toc-num {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--campus-cyan);
+      font-size: 0.85rem;
+      margin-right: 0.75rem;
+    }
+
+    /* Token Syntax Highlighting Básico */
+    .kw { color: #f472b6; font-weight: 600; } /* import, export, const, function */
+    .fn { color: #60a5fa; } /* app.use, router.get */
+    .str { color: #34d399; } /* "string" */
+    .num { color: #f59e0b; } /* 123 */
+    .cmt { color: #64748b; font-style: italic; } /* // comment */
+    .param { color: #a78bfa; } /* req, res, next */
+
+    /* Notificación Toast */
+    .toast-msg {
+      position: fixed;
+      bottom: 80px;
+      right: 25px;
+      background: #10b981;
+      color: #050a14;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      display: none;
+      z-index: 300;
+    }
+  </style>
+</head>
+<body class="mode-slides">
+
+  <!-- Header Superior -->
+  <header class="deck-header">
+    <div class="brand-wrap">
+      <span class="brand-badge">Campuslands</span>
+      <div class="brand-title">
+        <span>Express.js & Node.js</span>
+        <span class="brand-sub">• Fundamentos con ECMAScript Modules (ESM)</span>
+      </div>
+    </div>
+    <div class="nav-controls">
+      <button id="btnToggleMode" class="btn-action" title="Alternar entre Diapositivas y Documento (Tecla M)">
+        <span id="modeIcon">📖</span>
+        <span id="modeLabel">Modo Lectura</span>
+      </button>
+      <button id="btnOpenTOC" class="btn-action" title="Abrir Índice Temático (Tecla T)">
+        <span>📑</span>
+        <span>Índice</span>
+      </button>
+      <a href="https://github.com/anndreloopez012/campuslands-express-ejercicio-basico-interactivo" target="_blank" class="btn-action" title="Ver código fuente en GitHub">
+        <span>🐙</span>
+        <span>GitHub</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Barra de Progreso -->
+  <div class="progress-bar-container">
+    <div id="progressBar" class="progress-bar"></div>
+  </div>
+
+  <!-- Contenedor Principal de Diapositivas / Secciones -->
+  <main class="presentation-wrapper">
+
+    <!-- SLIDE 1: Portada y Bienvenida -->
+    <section class="slide-item active" data-step="1">
+      <span class="slide-badge">🚀 Módulo Oficial • Backend con Node.js</span>
+      <h1 class="slide-title">Express.js Básico desde Cero con ECMAScript</h1>
+      <p class="slide-desc">
+        Aprende a construir tu primera API REST profesional en Node.js utilizando el estándar moderno de 
+        <strong>ECMAScript Modules (ESM)</strong>, enrutadores modulares, arquitectura de middlewares y un 
+        CRUD completo operando sobre un arreglo en memoria sin bases de datos complejas.
+      </p>
+
+      <div class="grid-3">
+        <div class="card-info accent-green">
+          <div class="card-title">🌐 1. ¿Qué es una API REST?</div>
+          <div class="card-text">
+            Comprende la arquitectura Cliente-Servidor, el ciclo Request/Response, verbos HTTP (GET, POST, PUT, DELETE) 
+            y los códigos de estado que rigen la web.
+          </div>
+        </div>
+        <div class="card-info accent-cyan">
+          <div class="card-title">🛡️ 2. Middlewares en Cadena</div>
+          <div class="card-text">
+            Domina el flujo de ejecución con <code>(req, res, next)</code>: parseo de JSON, auditoría con logger, 
+            validación de campos y captura global de errores.
+          </div>
+        </div>
+        <div class="card-info accent-purple">
+          <div class="card-title">🛣️ 3. Enrutadores Modulares</div>
+          <div class="card-text">
+            Organiza tus endpoints en submódulos limpios con <code>express.Router()</code> desacoplados de <code>app.js</code> 
+            siguiendo las mejores prácticas de la industria.
+          </div>
+        </div>
+      </div>
+
+      <div class="card-info accent-amber" style="margin-top: 1.5rem;">
+        <div class="card-title">💡 ¿Cómo navegar esta guía interactiva?</div>
+        <div class="card-text">
+          • Usa las flechas <strong>←</strong> y <strong>→</strong> del teclado (o la barra inferior) para avanzar y retroceder.<br>
+          • Presiona <strong>M</strong> para cambiar al Modo Lectura Continua.<br>
+          • Presiona <strong>T</strong> para ver el índice completo de lecciones.<br>
+          • En las pantallas de código, <strong>haz clic en cualquier línea</strong> para ver la explicación línea por línea.
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: ¿Qué es una API REST y cómo funciona HTTP? -->
+    <section class="slide-item" data-step="2">
+      <span class="slide-badge cyan">📡 Concepto Fundamental</span>
+      <h2 class="slide-title">¿Qué es una API REST y cómo se comunica?</h2>
+      <p class="slide-desc">
+        Una <strong>API</strong> (<em>Application Programming Interface</em>) permite que dos programas independientes 
+        se comuniquen entre sí. En el desarrollo web, una <strong>API REST</strong> utiliza el protocolo estándar <strong>HTTP</strong> 
+        para intercambiar datos en formato <strong>JSON</strong>.
+      </p>
+
+      <div class="pipeline-container">
+        <div style="font-weight: 700; color: var(--campus-cyan); font-size: 0.95rem;">🔄 El Ciclo Request / Response (Petición y Respuesta)</div>
+        <div class="pipeline-flow">
+          <div class="pipeline-step">
+            <div class="step-title">💻 Cliente (Frontend / Postman)</div>
+            <div class="step-sub">Dispara la Petición HTTP</div>
+          </div>
+          <div class="pipeline-arrow">➔</div>
+          <div class="pipeline-step">
+            <div class="step-title">📨 Request (Petición)</div>
+            <div class="step-sub">Método + URL + Headers + Body</div>
+          </div>
+          <div class="pipeline-arrow">➔</div>
+          <div class="pipeline-step" style="border-color: var(--node-green);">
+            <div class="step-title">⚡ Servidor Express (Node.js)</div>
+            <div class="step-sub">Middlewares + Enrutador + Lógica</div>
+          </div>
+          <div class="pipeline-arrow">➔</div>
+          <div class="pipeline-step">
+            <div class="step-title">📬 Response (Respuesta)</div>
+            <div class="step-sub">Status Code + JSON Body</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: #fff;">Verbos HTTP Esenciales (Métodos)</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Método</th>
+                <th>Propósito en el CRUD</th>
+                <th>Tiene Body</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge-method get">GET</span></td>
+                <td>Consultar y recuperar datos sin modificarlos (Lectura)</td>
+                <td>❌ No</td>
+              </tr>
+              <tr>
+                <td><span class="badge-method post">POST</span></td>
+                <td>Crear un nuevo recurso en el servidor</td>
+                <td>✅ Sí (JSON)</td>
+              </tr>
+              <tr>
+                <td><span class="badge-method put">PUT</span></td>
+                <td>Actualizar por completo un recurso existente por su ID</td>
+                <td>✅ Sí (JSON)</td>
+              </tr>
+              <tr>
+                <td><span class="badge-method delete">DELETE</span></td>
+                <td>Eliminar un recurso específico según su ID</td>
+                <td>❌ Generalmente no</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: #fff;">Códigos de Estado HTTP (Status Codes)</h3>
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Significado</th>
+                <th>Cuándo se utiliza</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge-status s200">200 OK</span></td>
+                <td>Éxito</td>
+                <td>Petición GET, PUT o DELETE procesada correctamente</td>
+              </tr>
+              <tr>
+                <td><span class="badge-status s201">201 Created</span></td>
+                <td>Creado</td>
+                <td>Petición POST exitosa: el nuevo recurso fue creado</td>
+              </tr>
+              <tr>
+                <td><span class="badge-status s400">400 Bad Request</span></td>
+                <td>Petición Inválida</td>
+                <td>Faltan campos obligatorios o el formato JSON es erróneo</td>
+              </tr>
+              <tr>
+                <td><span class="badge-status s404">404 Not Found</span></td>
+                <td>No Encontrado</td>
+                <td>El ID del camper o la ruta solicitada no existen</td>
+              </tr>
+              <tr>
+                <td><span class="badge-status s500">500 Server Error</span></td>
+                <td>Error del Servidor</td>
+                <td>Excepción no controlada en el código del backend</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: ¿Qué son los Middlewares y cómo opera la cadena? -->
+    <section class="slide-item" data-step="3">
+      <span class="slide-badge purple">🛡️ Arquitectura de Software</span>
+      <h2 class="slide-title">¿Qué son los Middlewares en Express?</h2>
+      <p class="slide-desc">
+        Un <strong>middleware</strong> es una función que se sitúa entre la llegada de la petición (<em>Request</em>) y la 
+        emisión final de la respuesta (<em>Response</em>). Tienen acceso a los objetos <code>req</code>, <code>res</code> y a la 
+        función mágica <code>next()</code>.
+      </p>
+
+      <div class="pipeline-container">
+        <div style="font-weight: 700; color: var(--campus-purple); font-size: 0.95rem;">🔗 La Tubería de Ejecución (Pipeline de Middlewares)</div>
+        <div class="pipeline-flow">
+          <div class="pipeline-step">
+            <div class="step-title">📥 Petición Entrante</div>
+            <div class="step-sub">Llega desde el cliente</div>
+          </div>
+          <div class="pipeline-arrow">➔</div>
+          <div class="pipeline-step" style="border-color: var(--node-green);">
+            <div class="step-title">1. express.json()</div>
+            <div class="step-sub">Convierte body en req.body</div>
+          </div>
+          <div class="pipeline-arrow">➔</div>
+          <div class="pipeline-step" style="border-color: var(--campus-cyan);">
+            <div class="step-title">2. logger()</div>
+            <div class="step-sub">Registra fecha, hora y ruta</div>
+          </div>
+          <div class="pipeline-arrow">➔</div>
+          <div class="pipeline-step" style="border-color: var(--campus-amber);">
+            <div class="step-title">3. validator()</div>
+            <div class="step-sub">¿Faltan datos? ➔ 400</div>
+          </div>
+          <div class="pipeline-arrow">➔</div>
+          <div class="pipeline-step" style="border-color: var(--campus-purple);">
+            <div class="step-title">4. Route Handler</div>
+            <div class="step-sub">Operación sobre Arreglo</div>
+          </div>
+          <div class="pipeline-arrow">➔</div>
+          <div class="pipeline-step">
+            <div class="step-title">📤 res.json()</div>
+            <div class="step-sub">200 / 201 Response</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card-info accent-green">
+          <div class="card-title">🔑 La Regla de Oro: next()</div>
+          <div class="card-text">
+            Si un middleware no envía una respuesta directa al cliente (por ejemplo, con <code>res.status(400).json(...)</code>), 
+            <strong>es obligatorio llamar a <code>next()</code></strong>. Si no lo haces, la petición se quedará colgada indefinidamente.
+          </div>
+        </div>
+
+        <div class="card-info accent-amber">
+          <div class="card-title">🎯 Middlewares Globales vs de Ruta</div>
+          <div class="card-text">
+            • <strong>Globales (<code>app.use(...)</code>):</strong> Se ejecutan en absolutamente todas las peticiones (ej. <code>express.json()</code> y <code>logger</code>).<br>
+            • <strong>De Ruta:</strong> Se inyectan únicamente en endpoints específicos (ej. <code>router.post("/", validarCamper, ...)</code>).
+          </div>
+        </div>
+
+        <div class="card-info accent-red">
+          <div class="card-title">🚨 Error Handling Middleware</div>
+          <div class="card-text">
+            El middleware de errores de Express tiene una firma especial de <strong>4 parámetros</strong>: 
+            <code>(err, req, res, next)</code>. Express detecta esta aridad especial y le envía los errores lanzados sin tirar el servidor.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: Enrutadores Modulares (express.Router) -->
+    <section class="slide-item" data-step="4">
+      <span class="slide-badge">🛣️ Modularización Limpia</span>
+      <h2 class="slide-title">Enrutadores Modulares con express.Router()</h2>
+      <p class="slide-desc">
+        En proyectos pequeños es tentador escribir todas las rutas dentro de <code>app.js</code>. Sin embargo, 
+        a medida que la aplicación crece, esto se vuelve inmanejable. <code>express.Router()</code> permite aislar 
+        los endpoints de cada entidad en su propio archivo.
+      </p>
+
+      <div class="grid-2">
+        <div class="card-info accent-cyan">
+          <div class="card-title">📂 Enrutador: src/routes/campers.routes.js</div>
+          <div class="card-text">
+            Define las rutas relativas a su dominio. No necesita saber la ruta base en la que será montado:
+            <pre style="background: #080c14; padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8;">
+import { Router } from "express";
+const router = Router();
+
+router.get("/", (req, res) => { ... });
+router.get("/:id", (req, res) => { ... });
+router.post("/", (req, res) => { ... });
+
+export default router;</pre>
+          </div>
+        </div>
+
+        <div class="card-info accent-green">
+          <div class="card-title">⚡ Montaje en src/app.js</div>
+          <div class="card-text">
+            El servidor principal importa el router y le asigna el prefijo público con <code>app.use()</code>:
+            <pre style="background: #080c14; padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: #4ade80;">
+import express from "express";
+import campersRouter from "./routes/campers.routes.js";
+
+const app = express();
+
+// Todas las rutas del router quedan bajo /api/campers
+app.use("/api/campers", campersRouter);</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-info accent-purple" style="margin-top: 1rem;">
+        <div class="card-title">✨ Beneficio de la Modularidad</div>
+        <div class="card-text">
+          Si mañana deseas agregar una entidad <code>trainers</code> o <code>modulos</code>, solo creas 
+          <code>src/routes/trainers.routes.js</code> y lo montas con <code>app.use("/api/trainers", trainersRouter)</code>. 
+          Tu código permanece limpio, ordenado y escalable.
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Base de Datos en Memoria con Arreglos -->
+    <section class="slide-item" data-step="5">
+      <span class="slide-badge amber">💾 Persistencia Simple</span>
+      <h2 class="slide-title">Persistencia en Memoria: Arreglos de JavaScript</h2>
+      <p class="slide-desc">
+        Para aprender Express sin añadir la complejidad de configurar bases de datos (PostgreSQL, MySQL o MongoDB), 
+        utilizamos un <strong>arreglo en memoria mutable</strong> en <code>src/data/campers.db.js</code> exportado como ESM.
+      </p>
+
+      <div class="grid-2">
+        <div class="card-info accent-amber">
+          <div class="card-title">📦 Estructura del Arreglo en campers.db.js</div>
+          <div class="card-text">
+            <pre style="background: #080c14; padding: 0.75rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; color: #fbbf24;">
+export let campers = [
+  { id: 1, nombre: "Valeria Gómez", modulo: "Node.js", nivel: "Intermedio" },
+  { id: 2, nombre: "Carlos Morales", modulo: "JavaScript", nivel: "Básico" },
+  { id: 3, nombre: "Diana Ruiz", modulo: "Express", nivel: "Avanzado" }
+];</pre>
+          </div>
+        </div>
+
+        <div class="card-info accent-cyan">
+          <div class="card-title">🛠️ Métodos de Arreglos Utilizados en el CRUD</div>
+          <div class="card-text" style="font-size: 0.88rem;">
+            • <strong><code>find()</code>:</strong> Localiza el primer objeto cuyo <code>c.id === idBuscado</code> para el <code>GET /:id</code>.<br><br>
+            • <strong><code>push()</code>:</strong> Añade el nuevo objeto camper al final del arreglo en el <code>POST</code>.<br><br>
+            • <strong><code>findIndex()</code>:</strong> Encuentra el índice exacto para modificar en <code>PUT</code> o eliminar en <code>DELETE</code>.<br><br>
+            • <strong><code>splice(indice, 1)</code>:</strong> Extrae y elimina el camper del arreglo original.
+          </div>
+        </div>
+      </div>
+
+      <div class="card-info accent-green">
+        <div class="card-title">⚠️ ¿Qué significa "en memoria" (In-Memory)?</div>
+        <div class="card-text">
+          Los datos viven mientras el proceso de Node.js esté en ejecución en la memoria RAM. Si detienes o reinicias el servidor 
+          (<code>CTRL+C</code>), el arreglo se restablece a los datos semilla iniciales. ¡Esto es ideal para pruebas y laboratorios estudiantiles!
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Explorador Interactivo Línea a Línea del Código -->
+    <section class="slide-item" data-step="6">
+      <span class="slide-badge">🔍 Explorador Interactivo</span>
+      <h2 class="slide-title">Explorador de Código Línea a Línea</h2>
+      <p class="slide-desc">
+        Selecciona una pestaña de archivo y <strong>haz clic en cualquier línea de código</strong> para desplegar en el panel lateral 
+        su explicación técnica, propósito y buenas prácticas de ECMAScript.
+      </p>
+
+      <div class="code-explorer-container">
+        <!-- Pestañas de archivos -->
+        <div class="code-tabs">
+          <button class="code-tab-btn active" data-file="app">src/app.js</button>
+          <button class="code-tab-btn" data-file="routes">src/routes/campers.routes.js</button>
+          <button class="code-tab-btn" data-file="logger">src/middlewares/logger.js</button>
+          <button class="code-tab-btn" data-file="validator">src/middlewares/validator.js</button>
+          <button class="code-tab-btn" data-file="error">src/middlewares/errorHandler.js</button>
+          <button class="code-tab-btn" data-file="db">src/data/campers.db.js</button>
+        </div>
+
+        <div class="code-split">
+          <!-- Panel de código fuente con líneas clickeables -->
+          <div class="code-lines-panel" id="codeLinesPanel">
+            <!-- Se inyecta dinámicamente según la pestaña seleccionada -->
+          </div>
+
+          <!-- Panel de explicación detallada de la línea seleccionada -->
+          <div class="code-detail-panel" id="codeDetailPanel">
+            <span class="detail-badge" id="detailBadge">LÍNEA SELECCIONADA</span>
+            <h3 class="detail-heading" id="detailHeading">Haz clic en una línea de código</h3>
+            <div class="detail-body" id="detailBody">
+              Explora el código fuente a la izquierda. Al hacer clic sobre cualquier línea, verás aquí su análisis didáctico completo: qué función cumple en Node.js, parámetros que recibe y errores habituales que debes evitar.
+            </div>
+            <div class="detail-box-tip" id="detailTip">
+              💡 <strong>Tip para estudiantes:</strong> En ECMAScript Modules (ESM) siempre debes colocar la extensión <code>.js</code> en tus rutas de importación relativa (ej: <code>./routes/campers.routes.js</code>).
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Simulador REST Interactivo (Sandbox en Vivo) -->
+    <section class="slide-item" data-step="7">
+      <span class="slide-badge cyan">🎮 Sandbox en Vivo</span>
+      <h2 class="slide-title">Simulador Interactivo de Cliente API (Sandbox)</h2>
+      <p class="slide-desc">
+        Prueba cómo responde la API directamente en tu navegador sin instalar herramientas externas. 
+        Las operaciones simulan con exactitud la lógica de middlewares y actualizan el arreglo de memoria en tiempo real.
+      </p>
+
+      <div class="sandbox-container">
+        <!-- Barra de Presets Rápidos -->
+        <div class="sandbox-preset-bar">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">Pruebas Rápidas:</span>
+          <button class="btn-preset" onclick="setPreset('GET_ALL')">📋 Listar Todos [GET]</button>
+          <button class="btn-preset" onclick="setPreset('GET_ONE')">🔍 Buscar ID 1 [GET]</button>
+          <button class="btn-preset" onclick="setPreset('GET_404')">🚫 Buscar ID 99 [GET 404]</button>
+          <button class="btn-preset" onclick="setPreset('POST_OK')">➕ Crear Camper [POST 201]</button>
+          <button class="btn-preset" onclick="setPreset('POST_BAD')">⚠️ Error Validación [POST 400]</button>
+          <button class="btn-preset" onclick="setPreset('PUT_OK')">✏️ Modificar ID 1 [PUT]</button>
+          <button class="btn-preset" onclick="setPreset('DELETE_OK')">🗑️ Eliminar ID 2 [DELETE]</button>
+          <button class="btn-preset" style="color: var(--campus-amber); border-color: rgba(245,158,11,0.3);" onclick="reiniciarEstadoMemoria()">🔄 Reiniciar Arreglo</button>
+        </div>
+
+        <!-- Barra de URL y Método -->
+        <div class="sandbox-url-bar">
+          <select id="sandboxMethod" class="select-method">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+          <input type="text" id="sandboxUrl" class="input-url" value="/api/campers" placeholder="/api/campers">
+          <button class="btn-send" id="btnSendRequest" onclick="ejecutarPeticionSandbox()">
+            <span>🚀 Enviar Petición</span>
+          </button>
+        </div>
+
+        <!-- Paneles de Entrada y Salida -->
+        <div class="sandbox-panels">
+          <!-- Request Body Panel -->
+          <div class="sandbox-box">
+            <div class="sandbox-box-header">
+              <span>Cuerpo de la Petición (Request Body JSON)</span>
+              <span style="font-size: 0.75rem; color: var(--text-dim);">Solo para POST y PUT</span>
+            </div>
+            <textarea id="sandboxBody" class="textarea-body" placeholder='{\n  "nombre": "Esteban Andrade",\n  "modulo": "Node.js",\n  "nivel": "Básico"\n}'></textarea>
+            <div style="font-size: 0.75rem; color: var(--text-dim);">
+              Middleware activo: <code>express.json()</code> + <code>validarCamper</code>
+            </div>
+          </div>
+
+          <!-- Response Panel -->
+          <div class="sandbox-box">
+            <div class="sandbox-box-header">
+              <span>Respuesta del Servidor (Response)</span>
+              <span id="responseStatusBadge" class="badge-status s200">200 OK</span>
+            </div>
+            <pre id="sandboxOutput" class="output-json">// Presiona "Enviar Petición" para ver la respuesta aquí...</pre>
+            <div id="sandboxMeta" style="font-size: 0.75rem; color: var(--text-dim); font-family: var(--font-mono);">
+              Estado del servidor: Listo
+            </div>
+          </div>
+        </div>
+
+        <!-- Visualizador en Vivo del Arreglo en Memoria -->
+        <div class="memory-table-wrap">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-weight: 700; font-size: 0.88rem; color: #fff;">
+              📊 Estado en Vivo del Arreglo en Memoria (<code>src/data/campers.db.js</code>)
+            </span>
+            <span id="campersCountBadge" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--campus-cyan);">
+              Total: 3 campers
+            </span>
+          </div>
+          <table class="table-custom" id="tableMemoryCampers">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre del Camper</th>
+                <th>Módulo</th>
+                <th>Nivel</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyCampers">
+              <!-- Se actualiza reactivamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: Guía Paso a Paso para Correr Localmente -->
+    <section class="slide-item" data-step="8">
+      <span class="slide-badge">💻 En Tu Máquina</span>
+      <h2 class="slide-title">Cómo Clonar y Ejecutar el Proyecto Localmente</h2>
+      <p class="slide-desc">
+        Sigue estos pasos en tu computadora para descargar el repositorio, instalar las dependencias y ejecutar el servidor Express.
+      </p>
+
+      <div class="grid-2">
+        <div class="card-info accent-green">
+          <div class="card-title">1. Clonar e Instalar Dependencias</div>
+          <div class="card-text">
+            Abre tu terminal en la carpeta donde deseas trabajar:
+            <pre style="background: #080c14; padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: #4ade80;">
+git clone https://github.com/anndreloopez012/campuslands-express-ejercicio-basico-interactivo.git
+cd campuslands-express-ejercicio-basico-interactivo
+npm install</pre>
+          </div>
+        </div>
+
+        <div class="card-info accent-cyan">
+          <div class="card-title">2. Iniciar el Servidor de Desarrollo</div>
+          <div class="card-text">
+            Node.js 18+ incluye el modo vigilante automático (<code>--watch</code>):
+            <pre style="background: #080c14; padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8;">
+npm run dev
+
+# O si deseas ejecutarlo de forma normal:
+npm start</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-info accent-purple" style="margin-top: 1rem;">
+        <div class="card-title">3. Ejecutar la Suite de Pruebas Automatizadas</div>
+        <div class="card-text">
+          Puedes verificar que los 5 endpoints del CRUD y todas las validaciones funcionen al 100%:
+          <pre style="background: #080c14; padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: #c084fc;">
+npm test</pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Barra de Navegación Inferior Flotante (Dock) -->
+  <div class="slide-nav-dock">
+    <button id="btnPrev" class="dock-btn" title="Diapositiva Anterior (Flecha Izquierda)">‹</button>
+    <div id="dockCounter" class="dock-counter">1 / 8</div>
+    <button id="btnNext" class="dock-btn" title="Siguiente Diapositiva (Flecha Derecha)">›</button>
+  </div>
+
+  <!-- Modal de Índice Temático (TOC) -->
+  <div id="modalTOC" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">📑 Índice de Lecciones</h3>
+        <button id="btnCloseTOC" class="btn-close-modal">&times;</button>
+      </div>
+      <ul class="toc-list" id="tocList">
+        <li class="toc-item current" onclick="goToStep(1)">
+          <div><span class="toc-num">01</span><span>Bienvenida y Objetivos Pedagógicos</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Introducción</span>
+        </li>
+        <li class="toc-item" onclick="goToStep(2)">
+          <div><span class="toc-num">02</span><span>¿Qué es una API REST y cómo funciona HTTP?</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Conceptos</span>
+        </li>
+        <li class="toc-item" onclick="goToStep(3)">
+          <div><span class="toc-num">03</span><span>Arquitectura de Middlewares en Cadena</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Pipeline</span>
+        </li>
+        <li class="toc-item" onclick="goToStep(4)">
+          <div><span class="toc-num">04</span><span>Enrutadores Modulares con express.Router()</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Estructura</span>
+        </li>
+        <li class="toc-item" onclick="goToStep(5)">
+          <div><span class="toc-num">05</span><span>Persistencia en Memoria con Arreglos</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Almacén</span>
+        </li>
+        <li class="toc-item" onclick="goToStep(6)">
+          <div><span class="toc-num">06</span><span>Explorador de Código Línea a Línea</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Interactividad</span>
+        </li>
+        <li class="toc-item" onclick="goToStep(7)">
+          <div><span class="toc-num">07</span><span>Simulador REST Interactivo (Sandbox en Vivo)</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Laboratorio</span>
+        </li>
+        <li class="toc-item" onclick="goToStep(8)">
+          <div><span class="toc-num">08</span><span>Guía de Instalación y Ejecución Local</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Comandos</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Toast de Notificaciones -->
+  <div id="toastMsg" class="toast-msg">Mensaje copiado</div>
+
+  <!-- Código JavaScript de la Plataforma Educativa -->
+  <script>
+    // --- 1. DATOS DE LOS ARCHIVOS PARA EL EXPLORADOR LÍNEA A LÍNEA ---
+    const fileCodes = {
+      app: [
+        { ln: 1, code: `import express from "express";`, title: "Importación de Express con ESM", desc: "En ECMAScript Modules (ESM) importamos la función constructora de Express utilizando la palabra clave 'import' en lugar del obsoleto 'require'.", tip: "Asegúrate de que package.json tenga 'type': 'module'." },
+        { ln: 2, code: `import { logger } from "./middlewares/logger.js";`, title: "Importación del Middleware Logger", desc: "Importamos de forma nombrada nuestro middleware personalizado de auditoría. Nota el './' y la extensión '.js' obligatoria en ESM.", tip: "Si omites '.js', Node.js en modo ESM lanzará un error ERR_MODULE_NOT_FOUND." },
+        { ln: 3, code: `import { errorHandler } from "./middlewares/errorHandler.js";`, title: "Importación del Middleware de Errores", desc: "Traemos el manejador centralizado de errores que capturará cualquier fallo no controlado.", tip: "Debe montarse siempre al final de la cadena de middlewares." },
+        { ln: 4, code: `import campersRouter from "./routes/campers.routes.js";`, title: "Importación del Enrutador Modular", desc: "Importamos la exportación por defecto de campers.routes.js. Este objeto Router agrupa los 5 endpoints del CRUD.", tip: "Permite desacoplar responsabilidades y evitar un app.js gigante." },
+        { ln: 5, code: ``, title: "Línea vacía", desc: "Separación visual de bloques para mejorar la legibilidad del código.", tip: "Mantén tu código limpio con espacio en blanco intencional." },
+        { ln: 6, code: `const app = express();`, title: "Instanciación de la Aplicación", desc: "Crea la instancia principal de la aplicación Express. Este objeto 'app' gestiona la configuración, middlewares y el servidor HTTP.", tip: "'app' actúa como el corazón del backend." },
+        { ln: 7, code: `const PORT = process.env.PORT || 3000;`, title: "Definición del Puerto", desc: "Toma el puerto asignado por las variables de entorno del servidor (ej. en Dokploy o Render) o por defecto usa el puerto 3000 local.", tip: "Siempre permite que el puerto sea configurable vía process.env." },
+        { ln: 8, code: ``, title: "Línea vacía", desc: "Separador de sección.", tip: "" },
+        { ln: 9, code: `app.use(express.json());`, title: "Middleware Global JSON", desc: "Parsea automáticamente el cuerpo de las peticiones entrantes con encabezado 'Content-Type: application/json' y lo deposita en 'req.body'.", tip: "¡Sin esta línea, req.body será undefined en solicitudes POST y PUT!" },
+        { ln: 10, code: `app.use(logger);`, title: "Montaje del Logger Global", desc: "Registra en consola la estampa de tiempo, método y URL de toda solicitud entrante antes de llegar a los controladores.", tip: "Al usar app.use() sin ruta previa, aplica a todos los verbos y endpoints." },
+        { ln: 11, code: ``, title: "Línea vacía", desc: "Separador de sección.", tip: "" },
+        { ln: 12, code: `app.get("/", (req, res) => { ... });`, title: "Endpoint Raíz de Salud", desc: "Responde con un JSON informativo de bienvenida indicando la documentación de los endpoints del backend.", tip: "Útil para healthchecks de orquestadores y despliegues." },
+        { ln: 13, code: `app.use("/api/campers", campersRouter);`, title: "Montaje del Prefijo de Rutas", desc: "Asigna el prefijo '/api/campers' a todas las rutas declaradas dentro de campersRouter. Por ejemplo, router.get('/') se convierte en GET /api/campers.", tip: "Facilita el versionado de APIs (/api/v1/campers)." },
+        { ln: 14, code: `app.use((req, res) => { res.status(404).json(...); });`, title: "Manejador de Rutas Inexistentes (404)", desc: "Si una petición no coincidió con ninguna ruta anterior, cae en este middleware y devuelve 404 Not Found.", tip: "Siempre debe ir después de todas las rutas válidas." },
+        { ln: 15, code: `app.use(errorHandler);`, title: "Montaje del Middleware de Errores", desc: "Captura excepciones con firma (err, req, res, next). Debe ser OBLIGATORIAMENTE el último app.use().", tip: "Si lo pones antes de las rutas, no podrá atrapar los errores que ocurran en ellas." },
+        { ln: 16, code: `app.listen(PORT, () => { ... });`, title: "Apertura del Puerto de Escucha", desc: "Inicia el servidor HTTP escuchando conexiones en el puerto especificado.", tip: "En entorno de test lo envolvemos con una condición para evitar conflictos de puerto." }
+      ],
+      routes: [
+        { ln: 1, code: `import { Router } from "express";`, title: "Importación del Router", desc: "Extrae la clase Router de Express para generar mini-aplicaciones de rutas modulares e independientes.", tip: "Router es ligero y altamente desacoplable." },
+        { ln: 2, code: `import { campers } from "../data/campers.db.js";`, title: "Importación del Arreglo en Memoria", desc: "Importa el arreglo de campers mutable desde la capa de persistencia.", tip: "En ESM, los módulos importados son enlaces en vivo (live bindings)." },
+        { ln: 3, code: `import { validarCamper } from "../middlewares/validator.js";`, title: "Importación del Middleware Validador", desc: "Trae la función intermediaria que comprobará que el cuerpo traiga 'nombre', 'modulo' y 'nivel'.", tip: "Se inyectará únicamente en las rutas que reciban cuerpo (POST y PUT)." },
+        { ln: 4, code: `const router = Router();`, title: "Creación de la Instancia de Rutas", desc: "Inicializa el enrutador que contendrá las 5 operaciones del CRUD.", tip: "" },
+        { ln: 5, code: `router.get("/", (req, res) => { res.json({ datos: campers }); });`, title: "[GET /] Listar Campers", desc: "Recupera y retorna la totalidad de campers almacenados en el arreglo con estado HTTP 200 OK.", tip: "Operación de lectura idempotente y segura." },
+        { ln: 6, code: `router.get("/:id", (req, res) => { ... });`, title: "[GET /:id] Buscar Camper por ID", desc: "Lee el parámetro de ruta con req.params.id, lo convierte a número entero y usa campers.find(). Si no existe, retorna 404.", tip: "Recuerda validar que el parámetro sea un número válido con isNaN." },
+        { ln: 7, code: `router.post("/", validarCamper, (req, res) => { ... });`, title: "[POST /] Crear Camper", desc: "Primero ejecuta validarCamper. Si todo está correcto, calcula un ID único con Math.max, hace campers.push() y devuelve 201 Created.", tip: "201 Created es el código estándar oficial de REST al crear un recurso." },
+        { ln: 8, code: `router.put("/:id", validarCamper, (req, res) => { ... });`, title: "[PUT /:id] Actualizar Camper", desc: "Busca la posición con findIndex(). Si no existe responde 404. Si existe, reemplaza los datos y retorna 200 OK.", tip: "PUT reemplaza la totalidad del objeto con la nueva carga enviada." },
+        { ln: 9, code: `router.delete("/:id", (req, res) => { ... });`, title: "[DELETE /:id] Eliminar Camper", desc: "Localiza el índice con findIndex() y elimina el elemento mediante campers.splice(indice, 1). Retorna 200 OK y el camper borrado.", tip: "Splice modifica el arreglo original en memoria." },
+        { ln: 10, code: `export default router;`, title: "Exportación del Enrutador", desc: "Exporta el objeto router para ser importado y montado en app.js con app.use().", tip: "Usa export default para el recurso primario del módulo." }
+      ],
+      logger: [
+        { ln: 1, code: `export function logger(req, res, next) {`, title: "Firma del Middleware", desc: "Recibe req (petición), res (respuesta) y next (puntero al siguiente paso en la tubería).", tip: "Todo middleware intermediario debe recibir estos 3 parámetros." },
+        { ln: 2, code: `  const timestamp = new Date().toISOString();`, title: "Estampa de Tiempo ISO", desc: "Genera una cadena de fecha y hora estandarizada en formato UTC para auditoría.", tip: "Permite saber exactamente cuándo ocurrió cada evento." },
+        { ln: 3, code: `  const metodo = req.method;`, title: "Método HTTP", desc: "Obtiene si la petición es GET, POST, PUT, DELETE, etc.", tip: "req.method siempre está en mayúsculas." },
+        { ln: 4, code: `  const url = req.originalUrl || req.url;`, title: "Ruta Solicitada", desc: "Obtiene la URL completa requerida por el cliente (ej: /api/campers/1).", tip: "req.originalUrl conserva la ruta completa aun dentro de routers montados." },
+        { ln: 5, code: `  console.log(\`[\${timestamp}] 📡 \${metodo} -> \${url}\`);`, title: "Salida a Consola", desc: "Escribe la línea de log formateada en la terminal del servidor.", tip: "En producción se suelen usar librerías como Morgan o Winston." },
+        { ln: 6, code: `  next();`, title: "Llamada a next()", desc: "Cede el control al siguiente middleware o controlador de la pila. Sin esto, la petición muere por timeout.", tip: "¡Nunca olvides invocar next() salvo que ya hayas respondido con res.json()!" },
+        { ln: 7, code: `}`, title: "Fin de Función", desc: "Cierre del bloque de la función logger.", tip: "" }
+      ],
+      validator: [
+        { ln: 1, code: `export function validarCamper(req, res, next) {`, title: "Middleware de Validación", desc: "Interrumpe la petición antes de llegar al controlador si faltan datos esenciales en el body.", tip: "Protege la consistencia de los datos en memoria." },
+        { ln: 2, code: `  const { nombre, modulo, nivel } = req.body;`, title: "Desestructuración del Body", desc: "Extrae las propiedades enviadas por el cliente en el cuerpo de la solicitud JSON.", tip: "Requiere que express.json() haya corrido antes." },
+        { ln: 3, code: `  if (!req.body || typeof req.body !== "object") { ... }`, title: "Verificación de Cuerpo Válido", desc: "Comprueba que la petición no venga vacía o con formato no objeto.", tip: "Responde 400 Bad Request si es inválido." },
+        { ln: 4, code: `  if (!nombre || typeof nombre !== "string" || nombre.trim().length === 0) { ... }`, title: "Validación de 'nombre'", desc: "Verifica que el nombre exista, sea texto y no contenga únicamente espacios en blanco.", tip: "Usa trim() para limpiar espacios accidentales." },
+        { ln: 5, code: `  if (!modulo || typeof modulo !== "string") { ... }`, title: "Validación de 'modulo'", desc: "Exige que el módulo esté presente (ej: Node.js, Express, JavaScript).", tip: "" },
+        { ln: 6, code: `  if (!nivel || typeof nivel !== "string") { ... }`, title: "Validación de 'nivel'", desc: "Exige que el nivel esté presente (ej: Básico, Intermedio, Avanzado).", tip: "" },
+        { ln: 7, code: `  next();`, title: "Pase al Controlador", desc: "Como todos los campos cumplieron con la validación, cedemos el control al controlador POST o PUT.", tip: "El controlador ya puede confiar plenamente en los datos." }
+      ],
+      error: [
+        { ln: 1, code: `export function errorHandler(err, req, res, next) {`, title: "Firma de 4 Parámetros (Error)", desc: "En Express, el primer parámetro es 'err'. Si una función tiene 4 parámetros, Express la registra como Error Handler.", tip: "Si eliminas 'next' y dejas solo 3 parámetros, Express NO la tratará como error handler." },
+        { ln: 2, code: `  console.error("🚨 [ERROR GLOBAL CAPTURADO]:", err.message || err);`, title: "Registro del Error", desc: "Imprime la traza o mensaje del fallo en los logs internos del servidor para su análisis.", tip: "No expongas trazas técnicas confidenciales al cliente en producción." },
+        { ln: 3, code: `  const codigoEstado = err.statusCode || 500;`, title: "Determinación del Status", desc: "Utiliza el código de error personalizado si existe, o por defecto asigna 500 Internal Server Error.", tip: "500 indica fallo no esperado en el backend." },
+        { ln: 4, code: `  res.status(codigoEstado).json({ exito: false, error: ... });`, title: "Respuesta JSON Estandarizada", desc: "Retorna un mensaje de error limpio al cliente para que la aplicación frontend sepa cómo reaccionar.", tip: "Evita que la pantalla del usuario se quede colgada." }
+      ],
+      db: [
+        { ln: 1, code: `export let campers = [ ... ];`, title: "Arreglo Mutable Exportado", desc: "Declaramos un arreglo con 'let' y 'export' para que otros módulos puedan leerlo y modificarlo.", tip: "En ESM los live bindings permiten que los cambios se reflejen en los importadores." },
+        { ln: 2, code: `  { id: 1, nombre: "Valeria Gómez", modulo: "Node.js", nivel: "Intermedio" },`, title: "Objeto Semilla 1", desc: "Registro inicial de ejemplo para que la API cuente con datos desde el primer arranque.", tip: "" },
+        { ln: 3, code: `  { id: 2, nombre: "Carlos Morales", modulo: "JavaScript", nivel: "Básico" },`, title: "Objeto Semilla 2", desc: "Registro con id 2.", tip: "" },
+        { ln: 4, code: `  { id: 3, nombre: "Diana Ruiz", modulo: "Express", nivel: "Avanzado" }`, title: "Objeto Semilla 3", desc: "Registro con id 3.", tip: "" },
+        { ln: 5, code: `export function reiniciarCampers() { ... }`, title: "Función de Reseteo", desc: "Restaura el arreglo a sus 3 elementos originales. Muy útil para suites de pruebas y simulaciones.", tip: "Garantiza repetibilidad en tests." }
+      ]
+    };
+
+    // --- 2. GESTIÓN DEL VISOR DE CÓDIGO INTERACTIVO ---
+    let currentActiveFile = "app";
+
+    function renderCodeFile(fileKey) {
+      currentActiveFile = fileKey;
+      const lines = fileCodes[fileKey] || [];
+      const panel = document.getElementById("codeLinesPanel");
+      panel.innerHTML = "";
+
+      lines.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "code-row" + (index === 0 ? " active" : "");
+        row.innerHTML = `<span class="code-ln">${item.ln}</span><span class="code-text">${escapeHtml(item.code)}</span>`;
+        row.onclick = () => selectCodeLine(fileKey, index, row);
+        panel.appendChild(row);
+      });
+
+      // Seleccionar primera línea por defecto
+      if (lines.length > 0) {
+        updateCodeDetail(lines[0]);
+      }
+    }
+
+    function selectCodeLine(fileKey, index, rowEl) {
+      document.querySelectorAll(".code-row").forEach(r => r.classList.remove("active"));
+      rowEl.classList.add("active");
+      const item = fileCodes[fileKey][index];
+      updateCodeDetail(item);
+    }
+
+    function updateCodeDetail(item) {
+      document.getElementById("detailBadge").textContent = `LÍNEA ${item.ln}`;
+      document.getElementById("detailHeading").textContent = item.title;
+      document.getElementById("detailBody").innerHTML = item.desc;
+      document.getElementById("detailTip").innerHTML = `💡 <strong>Consejo:</strong> ${item.tip || "Revisa siempre la sintaxis y los tipos de datos."}`;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Configurar clics en pestañas de código
+    document.querySelectorAll(".code-tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".code-tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderCodeFile(btn.dataset.file);
+      });
+    });
+
+    // --- 3. SIMULADOR REST INTERACTIVO (SANDBOX EN VIVO) ---
+    // Copia reactiva del arreglo en memoria del navegador
+    let simCampers = [
+      { id: 1, nombre: "Valeria Gómez", modulo: "Node.js", nivel: "Intermedio" },
+      { id: 2, nombre: "Carlos Morales", modulo: "JavaScript", nivel: "Básico" },
+      { id: 3, nombre: "Diana Ruiz", modulo: "Express", nivel: "Avanzado" }
+    ];
+
+    function actualizarTablaMemoria() {
+      const tbody = document.getElementById("tbodyCampers");
+      tbody.innerHTML = "";
+      document.getElementById("campersCountBadge").textContent = `Total: ${simCampers.length} campers`;
+
+      if (simCampers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-dim);">No hay campers en memoria actualmente.</td></tr>`;
+        return;
+      }
+
+      simCampers.forEach(c => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="font-family: var(--font-mono); font-weight: 700; color: var(--campus-cyan);">${c.id}</td>
+          <td style="font-weight: 600; color: #fff;">${escapeHtml(c.nombre)}</td>
+          <td><span style="font-family: var(--font-mono); font-size: 0.8rem; background: rgba(255,255,255,0.06); padding: 0.2rem 0.5rem; border-radius: 4px;">${escapeHtml(c.modulo)}</span></td>
+          <td><span style="color: ${c.nivel === 'Avanzado' ? '#4ade80' : c.nivel === 'Intermedio' ? '#38bdf8' : '#fbbf24'}; font-weight: 600;">${escapeHtml(c.nivel)}</span></td>
+          <td>
+            <button class="btn-preset" style="padding: 0.2rem 0.5rem; font-size: 0.72rem; color: var(--campus-red);" onclick="eliminarCamperDirecto(${c.id})">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function setPreset(presetKey) {
+      const selMethod = document.getElementById("sandboxMethod");
+      const inpUrl = document.getElementById("sandboxUrl");
+      const txtBody = document.getElementById("sandboxBody");
+
+      switch(presetKey) {
+        case "GET_ALL":
+          selMethod.value = "GET";
+          inpUrl.value = "/api/campers";
+          txtBody.value = "";
+          break;
+        case "GET_ONE":
+          selMethod.value = "GET";
+          inpUrl.value = "/api/campers/1";
+          txtBody.value = "";
+          break;
+        case "GET_404":
+          selMethod.value = "GET";
+          inpUrl.value = "/api/campers/99";
+          txtBody.value = "";
+          break;
+        case "POST_OK":
+          selMethod.value = "POST";
+          inpUrl.value = "/api/campers";
+          txtBody.value = JSON.stringify({
+            nombre: "Esteban Andrade",
+            modulo: "Node.js",
+            nivel: "Básico"
+          }, null, 2);
+          break;
+        case "POST_BAD":
+          selMethod.value = "POST";
+          inpUrl.value = "/api/campers";
+          txtBody.value = JSON.stringify({
+            nombre: "",
+            modulo: "Express"
+          }, null, 2);
+          break;
+        case "PUT_OK":
+          selMethod.value = "PUT";
+          inpUrl.value = "/api/campers/1";
+          txtBody.value = JSON.stringify({
+            nombre: "Valeria Gómez de León",
+            modulo: "Express Avanzado",
+            nivel: "Avanzado"
+          }, null, 2);
+          break;
+        case "DELETE_OK":
+          selMethod.value = "DELETE";
+          inpUrl.value = "/api/campers/2";
+          txtBody.value = "";
+          break;
+      }
+    }
+
+    function ejecutarPeticionSandbox() {
+      const metodo = document.getElementById("sandboxMethod").value;
+      const url = document.getElementById("sandboxUrl").value.trim();
+      const rawBody = document.getElementById("sandboxBody").value.trim();
+      const badge = document.getElementById("responseStatusBadge");
+      const output = document.getElementById("sandboxOutput");
+      const meta = document.getElementById("sandboxMeta");
+
+      const timestamp = new Date().toLocaleTimeString();
+      let parsedBody = null;
+
+      // 1. Simulación de Middleware express.json()
+      if (metodo === "POST" || metodo === "PUT") {
+        if (!rawBody) {
+          return responderError(400, "Bad Request", "El cuerpo de la petición no puede estar vacío en POST/PUT.");
+        }
+        try {
+          parsedBody = JSON.parse(rawBody);
+        } catch(e) {
+          return responderError(400, "Bad Request", "Sintaxis JSON inválida en el cuerpo de la petición.");
+        }
+      }
+
+      // 2. Enrutamiento simulado
+      if (url === "/api/campers" && metodo === "GET") {
+        responderExito(200, "OK", { total: simCampers.length, datos: simCampers });
+      } 
+      else if (url.startsWith("/api/campers/") && metodo === "GET") {
+        const id = parseInt(url.replace("/api/campers/", ""), 10);
+        if (isNaN(id)) return responderError(400, "Bad Request", "El parámetro ID debe ser un número entero.");
+        const found = simCampers.find(c => c.id === id);
+        if (!found) return responderError(404, "Not Found", `No existe ningún camper con ID ${id}.`);
+        responderExito(200, "OK", { mensaje: "Camper encontrado exitosamente.", camper: found });
+      } 
+      else if (url === "/api/campers" && metodo === "POST") {
+        // Validación de campos obligatorios (Middleware validator)
+        if (!parsedBody.nombre || parsedBody.nombre.trim() === "") {
+          return responderError(400, "Bad Request", "El campo 'nombre' es obligatorio y no puede estar vacío.");
+        }
+        if (!parsedBody.modulo || parsedBody.modulo.trim() === "") {
+          return responderError(400, "Bad Request", "El campo 'modulo' es obligatorio.");
+        }
+        if (!parsedBody.nivel || parsedBody.nivel.trim() === "") {
+          return responderError(400, "Bad Request", "El campo 'nivel' es obligatorio.");
+        }
+
+        const newId = simCampers.length > 0 ? Math.max(...simCampers.map(c => c.id)) + 1 : 1;
+        const newCamper = {
+          id: newId,
+          nombre: parsedBody.nombre.trim(),
+          modulo: parsedBody.modulo.trim(),
+          nivel: parsedBody.nivel.trim()
+        };
+        simCampers.push(newCamper);
+        actualizarTablaMemoria();
+        responderExito(201, "Created", { mensaje: "Camper registrado exitosamente en memoria.", camper: newCamper });
+      }
+      else if (url.startsWith("/api/campers/") && metodo === "PUT") {
+        const id = parseInt(url.replace("/api/campers/", ""), 10);
+        if (isNaN(id)) return responderError(400, "Bad Request", "El ID debe ser numérico.");
+        const index = simCampers.findIndex(c => c.id === id);
+        if (index === -1) return responderError(404, "Not Found", `No existe camper con ID ${id} para actualizar.`);
+
+        if (!parsedBody.nombre || !parsedBody.modulo || !parsedBody.nivel) {
+          return responderError(400, "Bad Request", "Todos los campos ('nombre', 'modulo', 'nivel') son requeridos.");
+        }
+
+        simCampers[index] = {
+          id: id,
+          nombre: parsedBody.nombre.trim(),
+          modulo: parsedBody.modulo.trim(),
+          nivel: parsedBody.nivel.trim()
+        };
+        actualizarTablaMemoria();
+        responderExito(200, "OK", { mensaje: `Camper ${id} actualizado correctamente.`, camper: simCampers[index] });
+      }
+      else if (url.startsWith("/api/campers/") && metodo === "DELETE") {
+        const id = parseInt(url.replace("/api/campers/", ""), 10);
+        if (isNaN(id)) return responderError(400, "Bad Request", "El ID debe ser numérico.");
+        const index = simCampers.findIndex(c => c.id === id);
+        if (index === -1) return responderError(404, "Not Found", `No existe camper con ID ${id} para eliminar.`);
+
+        const [eliminado] = simCampers.splice(index, 1);
+        actualizarTablaMemoria();
+        responderExito(200, "OK", { mensaje: `Camper con ID ${id} eliminado exitosamente.`, camper: eliminado });
+      }
+      else {
+        responderError(404, "Not Found", `Ruta '${metodo} ${url}' no coincide con ningún endpoint registrado.`);
+      }
+
+      function responderExito(status, label, data) {
+        badge.className = "badge-status " + (status === 201 ? "s201" : "s200");
+        badge.textContent = `${status} ${label}`;
+        output.textContent = JSON.stringify(data, null, 2);
+        output.style.color = "#38bdf8";
+        meta.textContent = `[${timestamp}] 📡 Respuesta 2xx recibida correctamente (Content-Type: application/json)`;
+      }
+
+      function responderError(status, label, msg) {
+        badge.className = "badge-status " + (status === 400 ? "s400" : "s404");
+        badge.textContent = `${status} ${label}`;
+        output.textContent = JSON.stringify({ exito: false, error: msg }, null, 2);
+        output.style.color = status === 400 ? "#fbbf24" : "#f87171";
+        meta.textContent = `[${timestamp}] ⚠️ Interceptado con status ${status} (${label})`;
+      }
+    }
+
+    function eliminarCamperDirecto(id) {
+      document.getElementById("sandboxMethod").value = "DELETE";
+      document.getElementById("sandboxUrl").value = `/api/campers/${id}`;
+      document.getElementById("sandboxBody").value = "";
+      ejecutarPeticionSandbox();
+    }
+
+    function reiniciarEstadoMemoria() {
+      simCampers = [
+        { id: 1, nombre: "Valeria Gómez", modulo: "Node.js", nivel: "Intermedio" },
+        { id: 2, nombre: "Carlos Morales", modulo: "JavaScript", nivel: "Básico" },
+        { id: 3, nombre: "Diana Ruiz", modulo: "Express", nivel: "Avanzado" }
+      ];
+      actualizarTablaMemoria();
+      mostrarToast("🔄 Arreglo en memoria restaurado a los 3 registros semilla");
+    }
+
+    function mostrarToast(msg) {
+      const toast = document.getElementById("toastMsg");
+      toast.textContent = msg;
+      toast.style.display = "block";
+      setTimeout(() => { toast.style.display = "none"; }, 2800);
+    }
+
+    // --- 4. GESTIÓN DE NAVEGACIÓN Y SLIDES ---
+    let currentStep = 1;
+    const totalSteps = 8;
+
+    function goToStep(step) {
+      if (step < 1 || step > totalSteps) return;
+      currentStep = step;
+
+      // Actualizar clases de slides
+      document.querySelectorAll(".slide-item").forEach(s => {
+        s.classList.toggle("active", parseInt(s.dataset.step, 10) === currentStep);
+      });
+
+      // Actualizar contador y barra
+      document.getElementById("dockCounter").textContent = `${currentStep} / ${totalSteps}`;
+      document.getElementById("progressBar").style.width = `${(currentStep / totalSteps) * 100}%`;
+
+      // Habilitar/deshabilitar botones dock
+      document.getElementById("btnPrev").disabled = currentStep === 1;
+      document.getElementById("btnNext").disabled = currentStep === totalSteps;
+
+      // Actualizar TOC
+      document.querySelectorAll(".toc-item").forEach((it, idx) => {
+        it.classList.toggle("current", idx + 1 === currentStep);
+      });
+
+      // Cerrar modal TOC si estaba abierto
+      document.getElementById("modalTOC").classList.remove("active");
+
+      // Scroll arriba si está en modo doc
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.getElementById("btnPrev").onclick = () => goToStep(currentStep - 1);
+    document.getElementById("btnNext").onclick = () => goToStep(currentStep + 1);
+
+    // Atajos de Teclado
+    document.addEventListener("keydown", (e) => {
+      // Ignorar si el usuario está escribiendo en el textarea o input
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) return;
+
+      if (e.key === "ArrowRight") {
+        goToStep(currentStep + 1);
+      } else if (e.key === "ArrowLeft") {
+        goToStep(currentStep - 1);
+      } else if (e.key.toLowerCase() === "m") {
+        toggleViewMode();
+      } else if (e.key.toLowerCase() === "t") {
+        toggleTOCModal();
+      } else if (e.key === "Escape") {
+        document.getElementById("modalTOC").classList.remove("active");
+      }
+    });
+
+    // Alternar Modo Diapositivas vs Documento Continuo
+    function toggleViewMode() {
+      const body = document.body;
+      const isSlides = body.classList.contains("mode-slides");
+      if (isSlides) {
+        body.classList.remove("mode-slides");
+        body.classList.add("mode-doc");
+        document.getElementById("modeIcon").textContent = "📽️";
+        document.getElementById("modeLabel").textContent = "Modo Diapositivas";
+        mostrarToast("Modo Lectura Continuo activado");
+      } else {
+        body.classList.remove("mode-doc");
+        body.classList.add("mode-slides");
+        document.getElementById("modeIcon").textContent = "📖";
+        document.getElementById("modeLabel").textContent = "Modo Lectura";
+        goToStep(currentStep);
+        mostrarToast("Modo Diapositivas activado");
+      }
+    }
+
+    document.getElementById("btnToggleMode").onclick = toggleViewMode;
+
+    // Modal TOC
+    function toggleTOCModal() {
+      document.getElementById("modalTOC").classList.toggle("active");
+    }
+
+    document.getElementById("btnOpenTOC").onclick = toggleTOCModal;
+    document.getElementById("btnCloseTOC").onclick = () => document.getElementById("modalTOC").classList.remove("active");
+
+    // Inicialización al cargar la página
+    window.addEventListener("DOMContentLoaded", () => {
+      renderCodeFile("app");
+      actualizarTablaMemoria();
+      goToStep(1);
+    });
+  </script>
+</body>
+</html>
