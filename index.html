@@ -129,12 +129,6 @@
       transform: translateY(-1px);
     }
 
-    .btn-action.active {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: var(--campus-cyan);
-      color: var(--campus-cyan);
-    }
-
     .progress-bar-container {
       position: fixed;
       top: 64px;
@@ -268,7 +262,7 @@
       max-width: 960px;
     }
 
-    /* Grillas y Cajas de Información */
+    /* Grillas y Cajas */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr;
@@ -283,17 +277,9 @@
       margin: 1.5rem 0;
     }
 
-    .grid-4 {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-
     @media (min-width: 768px) {
       .grid-2 { grid-template-columns: repeat(2, 1fr); }
       .grid-3 { grid-template-columns: repeat(3, 1fr); }
-      .grid-4 { grid-template-columns: repeat(4, 1fr); }
     }
 
     .card-info {
@@ -323,6 +309,7 @@
       margin-bottom: 0.6rem;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 0.5rem;
     }
 
@@ -330,6 +317,49 @@
       color: var(--text-muted);
       font-size: 0.92rem;
       line-height: 1.6;
+    }
+
+    /* Bloques de Código de Terminal con Botón de Copiado */
+    .terminal-box {
+      background: #060910;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin: 0.85rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      position: relative;
+      color: #38bdf8;
+      overflow-x: auto;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .btn-copy {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-copy:hover {
+      background: var(--campus-cyan);
+      color: #050a14;
+      font-weight: 700;
     }
 
     /* Diagrama de Pipeline de Middlewares */
@@ -588,15 +618,6 @@
       color: #bbf7d0;
     }
 
-    .detail-box-warning {
-      background: rgba(245, 158, 11, 0.08);
-      border: 1px solid rgba(245, 158, 11, 0.2);
-      border-radius: 8px;
-      padding: 0.9rem 1rem;
-      font-size: 0.85rem;
-      color: #fde68a;
-    }
-
     /* Simulador REST Interactivo (Sandbox) */
     .sandbox-container {
       background: var(--bg-code);
@@ -813,7 +834,7 @@
       font-size: 0.85rem;
       font-weight: 700;
       color: var(--text-muted);
-      min-width: 60px;
+      min-width: 70px;
       text-align: center;
     }
 
@@ -911,14 +932,6 @@
       font-size: 0.85rem;
       margin-right: 0.75rem;
     }
-
-    /* Token Syntax Highlighting Básico */
-    .kw { color: #f472b6; font-weight: 600; } /* import, export, const, function */
-    .fn { color: #60a5fa; } /* app.use, router.get */
-    .str { color: #34d399; } /* "string" */
-    .num { color: #f59e0b; } /* 123 */
-    .cmt { color: #64748b; font-style: italic; } /* // comment */
-    .param { color: #a78bfa; } /* req, res, next */
 
     /* Notificación Toast */
     .toast-msg {
@@ -1297,8 +1310,106 @@ export let campers = [
       </div>
     </section>
 
-    <!-- SLIDE 6: Explorador Interactivo Línea a Línea del Código -->
+    <!-- SLIDE 6 (NUEVO): Paso a Paso de Inicialización y Estructura antes del Código -->
     <section class="slide-item" data-step="6">
+      <span class="slide-badge cyan">🛠️ Paso a Paso Inicial</span>
+      <h2 class="slide-title">Cómo Iniciar el Proyecto y Crear la Estructura</h2>
+      <p class="slide-desc">
+        Antes de escribir una sola línea de código en los archivos, los campers deben inicializar el entorno en su terminal, 
+        configurar ECMAScript Modules en <code>package.json</code> y preparar las carpetas organizadas por capas.
+      </p>
+
+      <div class="grid-2">
+        <div class="card-info accent-cyan">
+          <div class="card-title">
+            <span>1. Comandos de Terminal para Inicializar</span>
+            <button class="btn-copy" onclick="copiarTexto(`mkdir campuslands-express-crud && cd campuslands-express-crud\nnpm init -y\nnpm install express\nmkdir -p src/data src/middlewares src/routes\ntouch src/app.js src/data/campers.db.js src/middlewares/logger.js src/middlewares/validator.js src/middlewares/errorHandler.js src/routes/campers.routes.js`)">Copiar Todos</button>
+          </div>
+          <div class="card-text">
+            Ejecuta estos comandos en tu terminal para crear el proyecto y los archivos vacíos:
+            <div class="terminal-box">
+              <div class="terminal-header">
+                <span>BASH / TERMINAL</span>
+              </div>
+# 1. Crear carpeta y entrar a ella<br>
+mkdir campuslands-express-crud && cd campuslands-express-crud<br><br>
+# 2. Inicializar package.json por defecto<br>
+npm init -y<br><br>
+# 3. Instalar Express como dependencia<br>
+npm install express<br><br>
+# 4. Crear estructura de carpetas<br>
+mkdir -p src/data src/middlewares src/routes<br><br>
+# 5. Crear los archivos base vacíos<br>
+touch src/app.js<br>
+touch src/data/campers.db.js<br>
+touch src/middlewares/logger.js<br>
+touch src/middlewares/validator.js<br>
+touch src/middlewares/errorHandler.js<br>
+touch src/routes/campers.routes.js
+            </div>
+          </div>
+        </div>
+
+        <div class="card-info accent-green">
+          <div class="card-title">
+            <span>2. Configurar package.json ("type": "module")</span>
+            <button class="btn-copy" onclick="copiarTexto(`{\n  &quot;name&quot;: &quot;campuslands-express-crud&quot;,\n  &quot;version&quot;: &quot;1.0.0&quot;,\n  &quot;type&quot;: &quot;module&quot;,\n  &quot;main&quot;: &quot;src/app.js&quot;,\n  &quot;scripts&quot;: {\n    &quot;start&quot;: &quot;node src/app.js&quot;,\n    &quot;dev&quot;: &quot;node --watch src/app.js&quot;\n  },\n  &quot;dependencies&quot;: {\n    &quot;express&quot;: &quot;^4.21.2&quot;\n  }\n}`)">Copiar JSON</button>
+          </div>
+          <div class="card-text">
+            Abre tu <code>package.json</code> y agrega <strong><code>"type": "module"</code></strong> y los scripts de ejecución:
+            <div class="terminal-box">
+              <div class="terminal-header">
+                <span>PACKAGE.JSON</span>
+              </div>
+{<br>
+&nbsp;&nbsp;<span style="color: #f472b6;">"name"</span>: <span style="color: #34d399;">"campuslands-express-crud"</span>,<br>
+&nbsp;&nbsp;<span style="color: #f472b6;">"version"</span>: <span style="color: #34d399;">"1.0.0"</span>,<br>
+&nbsp;&nbsp;<strong style="color: #38bdf8;">"type": "module"</strong>, <span style="color: #64748b;">// &lt;-- ¡Obligatorio para ESM!</span><br>
+&nbsp;&nbsp;<span style="color: #f472b6;">"main"</span>: <span style="color: #34d399;">"src/app.js"</span>,<br>
+&nbsp;&nbsp;<span style="color: #f472b6;">"scripts"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #f472b6;">"start"</span>: <span style="color: #34d399;">"node src/app.js"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #f472b6;">"dev"</span>: <span style="color: #34d399;">"node --watch src/app.js"</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span style="color: #f472b6;">"dependencies"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #f472b6;">"express"</span>: <span style="color: #34d399;">"^4.21.2"</span><br>
+&nbsp;&nbsp;}<br>
+}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-info accent-purple" style="margin-top: 1rem;">
+        <div class="card-title">📂 Estructura Final del Proyecto que Crearemos</div>
+        <div class="card-text" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.82rem; background: #080c14; padding: 1rem; border-radius: 8px; color: #a78bfa;">
+campuslands-express-crud/<br>
+├── package.json<br>
+└── src/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── app.js<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── data/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── campers.db.js<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├── middlewares/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── errorHandler.js<br>
+&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── logger.js<br>
+&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── validator.js<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└── routes/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── campers.routes.js
+          </div>
+          <div style="font-size: 0.88rem; line-height: 1.6;">
+            <strong>¿Por qué esta estructura?</strong><br>
+            • <code>src/app.js</code>: Servidor, middlewares globales y montaje de rutas.<br>
+            • <code>src/data/</code>: Arreglo de campers en memoria (datos volátiles).<br>
+            • <code>src/middlewares/</code>: Auditoría, validación de cuerpo y captura de errores.<br>
+            • <code>src/routes/</code>: Enrutador con los 5 endpoints del CRUD.<br>
+            👉 <em>¡En la siguiente diapositiva revisaremos el código de cada archivo línea por línea!</em>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Explorador Interactivo Línea a Línea del Código -->
+    <section class="slide-item" data-step="7">
       <span class="slide-badge">🔍 Explorador Interactivo</span>
       <h2 class="slide-title">Explorador de Código Línea a Línea</h2>
       <p class="slide-desc">
@@ -1338,13 +1449,116 @@ export let campers = [
       </div>
     </section>
 
-    <!-- SLIDE 7: Simulador REST Interactivo (Sandbox en Vivo) -->
-    <section class="slide-item" data-step="7">
+    <!-- SLIDE 8 (NUEVO): Ejecución y Pruebas Locales en su Máquina -->
+    <section class="slide-item" data-step="8">
+      <span class="slide-badge accent-green">💻 Pruebas en tu Máquina Local</span>
+      <h2 class="slide-title">Cómo Correr y Probar la API en tu Computadora</h2>
+      <p class="slide-desc">
+        Una vez escritos los archivos en tu proyecto local, sigue estos comandos para iniciar tu servidor Express 
+        y probar cada uno de los 5 endpoints del CRUD utilizando tu propia terminal con <strong>cURL</strong> o navegando desde tu explorador.
+      </p>
+
+      <div class="grid-2">
+        <div class="card-info accent-green">
+          <div class="card-title">
+            <span>1. Iniciar el Servidor Local</span>
+            <button class="btn-copy" onclick="copiarTexto('npm run dev')">Copiar</button>
+          </div>
+          <div class="card-text">
+            En la terminal de tu proyecto ejecuta:
+            <div class="terminal-box">
+              <div class="terminal-header"><span>TERMINAL 1 (SERVIDOR)</span></div>
+npm run dev<br><br>
+<span style="color: #4ade80;">🚀 Servidor Express escuchando en http://localhost:3000</span><br>
+<span style="color: #38bdf8;">📡 Endpoints CRUD disponibles en http://localhost:3000/api/campers</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem;">
+              Deja esta terminal abierta. Cada vez que llegue una petición, el middleware <code>logger</code> imprimirá en vivo el método y la URL.
+            </p>
+          </div>
+        </div>
+
+        <div class="card-info accent-cyan">
+          <div class="card-title">
+            <span>2. Verificar en el Navegador</span>
+            <button class="btn-copy" onclick="copiarTexto('http://localhost:3000/')">Copiar URL</button>
+          </div>
+          <div class="card-text">
+            Abre tu navegador web e ingresa a:
+            <div class="terminal-box">
+              <div class="terminal-header"><span>URL DEL NAVEGADOR</span></div>
+http://localhost:3000/<br>
+http://localhost:3000/api/campers
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem;">
+              Verás el JSON con el saludo de salud y el listado de los 3 campers iniciales en memoria.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-info accent-purple" style="margin-top: 1rem;">
+        <div class="card-title">
+          <span>3. Comandos cURL para Probar los 5 Endpoints del CRUD</span>
+          <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-dim);">Abre una segunda terminal para ejecutarlos</span>
+        </div>
+        <div class="card-text">
+          <div class="grid-2" style="margin: 0.5rem 0;">
+            <div>
+              <strong>1. Consultar todos los campers [GET]</strong>
+              <div class="terminal-box">
+                <button class="btn-copy" style="float: right;" onclick="copiarTexto('curl http://localhost:3000/api/campers')">Copiar</button>
+                curl http://localhost:3000/api/campers
+              </div>
+
+              <strong>2. Buscar camper con ID 1 [GET]</strong>
+              <div class="terminal-box">
+                <button class="btn-copy" style="float: right;" onclick="copiarTexto('curl http://localhost:3000/api/campers/1')">Copiar</button>
+                curl http://localhost:3000/api/campers/1
+              </div>
+
+              <strong>3. Probar error 404 con ID inexistente [GET]</strong>
+              <div class="terminal-box">
+                <button class="btn-copy" style="float: right;" onclick="copiarTexto('curl http://localhost:3000/api/campers/999')">Copiar</button>
+                curl http://localhost:3000/api/campers/999
+              </div>
+            </div>
+
+            <div>
+              <strong>4. Crear nuevo camper con Body [POST 201]</strong>
+              <div class="terminal-box">
+                <button class="btn-copy" style="float: right;" onclick="copiarTexto(`curl -X POST http://localhost:3000/api/campers -H &quot;Content-Type: application/json&quot; -d '{\&quot;nombre\&quot;:\&quot;Esteban Andrade\&quot;,\&quot;modulo\&quot;:\&quot;Node.js\&quot;,\&quot;nivel\&quot;:\&quot;Básico\&quot;}'`)">Copiar</button>
+                curl -X POST http://localhost:3000/api/campers \<br>
+                &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+                &nbsp;&nbsp;-d '{"nombre":"Esteban Andrade","modulo":"Node.js","nivel":"Básico"}'
+              </div>
+
+              <strong>5. Actualizar camper existente [PUT 200]</strong>
+              <div class="terminal-box">
+                <button class="btn-copy" style="float: right;" onclick="copiarTexto(`curl -X PUT http://localhost:3000/api/campers/1 -H &quot;Content-Type: application/json&quot; -d '{\&quot;nombre\&quot;:\&quot;Valeria Gómez Actualizada\&quot;,\&quot;modulo\&quot;:\&quot;Express Avanzado\&quot;,\&quot;nivel\&quot;:\&quot;Avanzado\&quot;}'`)">Copiar</button>
+                curl -X PUT http://localhost:3000/api/campers/1 \<br>
+                &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+                &nbsp;&nbsp;-d '{"nombre":"Valeria Gómez Actualizada","modulo":"Express Avanzado","nivel":"Avanzado"}'
+              </div>
+
+              <strong>6. Eliminar camper por ID [DELETE 200]</strong>
+              <div class="terminal-box">
+                <button class="btn-copy" style="float: right;" onclick="copiarTexto('curl -X DELETE http://localhost:3000/api/campers/2')">Copiar</button>
+                curl -X DELETE http://localhost:3000/api/campers/2
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: Simulador REST Interactivo (Sandbox en Vivo) -->
+    <section class="slide-item" data-step="9">
       <span class="slide-badge cyan">🎮 Sandbox en Vivo</span>
       <h2 class="slide-title">Simulador Interactivo de Cliente API (Sandbox)</h2>
       <p class="slide-desc">
-        Prueba cómo responde la API directamente en tu navegador sin instalar herramientas externas. 
-        Las operaciones simulan con exactitud la lógica de middlewares y actualizan el arreglo de memoria en tiempo real.
+        ¿Aún no estás frente a tu terminal? Prueba cómo responde la API directamente en tu navegador. 
+        Este simulador replica con exactitud los middlewares, validaciones y actualiza el arreglo de memoria en tiempo real.
       </p>
 
       <div class="sandbox-container">
@@ -1430,45 +1644,52 @@ export let campers = [
       </div>
     </section>
 
-    <!-- SLIDE 8: Guía Paso a Paso para Correr Localmente -->
-    <section class="slide-item" data-step="8">
-      <span class="slide-badge">💻 En Tu Máquina</span>
-      <h2 class="slide-title">Cómo Clonar y Ejecutar el Proyecto Localmente</h2>
+    <!-- SLIDE 10: Flujo de Trabajo y Buenas Prácticas -->
+    <section class="slide-item" data-step="10">
+      <span class="slide-badge amber">🌿 Buenas Prácticas</span>
+      <h2 class="slide-title">Flujo Profesional con Ramas Git y Despliegue</h2>
       <p class="slide-desc">
-        Sigue estos pasos en tu computadora para descargar el repositorio, instalar las dependencias y ejecutar el servidor Express.
+        En entornos profesionales de desarrollo como Campuslands, nunca se trabaja directamente en la rama principal. 
+        Aprende el flujo de trabajo colaborativo con ramas de funcionalidad (Git Flow).
       </p>
 
-      <div class="grid-2">
-        <div class="card-info accent-green">
-          <div class="card-title">1. Clonar e Instalar Dependencias</div>
+      <div class="grid-3">
+        <div class="card-info accent-cyan">
+          <div class="card-title">1. Ramas de Funcionalidad</div>
           <div class="card-text">
-            Abre tu terminal en la carpeta donde deseas trabajar:
-            <pre style="background: #080c14; padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: #4ade80;">
-git clone https://github.com/anndreloopez012/campuslands-express-ejercicio-basico-interactivo.git
-cd campuslands-express-ejercicio-basico-interactivo
-npm install</pre>
+            Crea una rama por cada tarea aislada:<br>
+            <code>git checkout -b feat/01-setup</code><br>
+            <code>git checkout -b feat/02-crud-routes</code><br>
+            <code>git checkout -b feat/03-middlewares</code>
           </div>
         </div>
 
-        <div class="card-info accent-cyan">
-          <div class="card-title">2. Iniciar el Servidor de Desarrollo</div>
+        <div class="card-info accent-purple">
+          <div class="card-title">2. Rama de Integración (dev)</div>
           <div class="card-text">
-            Node.js 18+ incluye el modo vigilante automático (<code>--watch</code>):
-            <pre style="background: #080c14; padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8;">
-npm run dev
+            Al terminar una característica, fusionala primero en <code>dev</code> y corre pruebas:<br>
+            <code>git checkout dev</code><br>
+            <code>git merge feat/01-setup</code>
+          </div>
+        </div>
 
-# O si deseas ejecutarlo de forma normal:
-npm start</pre>
+        <div class="card-info accent-green">
+          <div class="card-title">3. Producción (main)</div>
+          <div class="card-text">
+            Una vez verificado que todo funciona en <code>dev</code>, integra a <code>main</code>:<br>
+            <code>git checkout main</code><br>
+            <code>git merge dev</code><br>
+            <code>git push origin main</code>
           </div>
         </div>
       </div>
 
-      <div class="card-info accent-purple" style="margin-top: 1rem;">
-        <div class="card-title">3. Ejecutar la Suite de Pruebas Automatizadas</div>
+      <div class="card-info accent-amber" style="margin-top: 1.5rem;">
+        <div class="card-title">🎓 ¡Felicitaciones Camper!</div>
         <div class="card-text">
-          Puedes verificar que los 5 endpoints del CRUD y todas las validaciones funcionen al 100%:
-          <pre style="background: #080c14; padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: #c084fc;">
-npm test</pre>
+          Ahora tienes el conocimiento completo para estructurar proyectos con <strong>Express.js</strong>, 
+          aprovechar la potencia de <strong>ECMAScript Modules</strong>, modularizar con <strong>Router</strong>, 
+          blindar tus endpoints con <strong>Middlewares</strong> y gestionar tus repositorios con Git profesional.
         </div>
       </div>
     </section>
@@ -1478,7 +1699,7 @@ npm test</pre>
   <!-- Barra de Navegación Inferior Flotante (Dock) -->
   <div class="slide-nav-dock">
     <button id="btnPrev" class="dock-btn" title="Diapositiva Anterior (Flecha Izquierda)">‹</button>
-    <div id="dockCounter" class="dock-counter">1 / 8</div>
+    <div id="dockCounter" class="dock-counter">1 / 10</div>
     <button id="btnNext" class="dock-btn" title="Siguiente Diapositiva (Flecha Derecha)">›</button>
   </div>
 
@@ -1511,23 +1732,31 @@ npm test</pre>
           <span style="color: var(--text-dim); font-size: 0.8rem;">Almacén</span>
         </li>
         <li class="toc-item" onclick="goToStep(6)">
-          <div><span class="toc-num">06</span><span>Explorador de Código Línea a Línea</span></div>
-          <span style="color: var(--text-dim); font-size: 0.8rem;">Interactividad</span>
+          <div><span class="toc-num">06</span><span>Inicialización y Estructura del Proyecto Paso a Paso</span></div>
+          <span style="color: #38bdf8; font-size: 0.8rem; font-weight: 700;">Setup Terminal</span>
         </li>
         <li class="toc-item" onclick="goToStep(7)">
-          <div><span class="toc-num">07</span><span>Simulador REST Interactivo (Sandbox en Vivo)</span></div>
-          <span style="color: var(--text-dim); font-size: 0.8rem;">Laboratorio</span>
+          <div><span class="toc-num">07</span><span>Explorador de Código Línea a Línea</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Interactividad</span>
         </li>
         <li class="toc-item" onclick="goToStep(8)">
-          <div><span class="toc-num">08</span><span>Guía de Instalación y Ejecución Local</span></div>
-          <span style="color: var(--text-dim); font-size: 0.8rem;">Comandos</span>
+          <div><span class="toc-num">08</span><span>Ejecución y Pruebas Locales en tu Máquina (cURL)</span></div>
+          <span style="color: #4ade80; font-size: 0.8rem; font-weight: 700;">Pruebas Locales</span>
+        </li>
+        <li class="toc-item" onclick="goToStep(9)">
+          <div><span class="toc-num">09</span><span>Simulador REST Interactivo (Sandbox en Vivo)</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Laboratorio</span>
+        </li>
+        <li class="toc-item" onclick="goToStep(10)">
+          <div><span class="toc-num">10</span><span>Buenas Prácticas y Flujo Git Profesional</span></div>
+          <span style="color: var(--text-dim); font-size: 0.8rem;">Git Flow</span>
         </li>
       </ul>
     </div>
   </div>
 
   <!-- Toast de Notificaciones -->
-  <div id="toastMsg" class="toast-msg">Mensaje copiado</div>
+  <div id="toastMsg" class="toast-msg">Copiado al portapapeles</div>
 
   <!-- Código JavaScript de la Plataforma Educativa -->
   <script>
@@ -1647,7 +1876,6 @@ npm test</pre>
     });
 
     // --- 3. SIMULADOR REST INTERACTIVO (SANDBOX EN VIVO) ---
-    // Copia reactiva del arreglo en memoria del navegador
     let simCampers = [
       { id: 1, nombre: "Valeria Gómez", modulo: "Node.js", nivel: "Intermedio" },
       { id: 2, nombre: "Carlos Morales", modulo: "JavaScript", nivel: "Básico" },
@@ -1769,7 +1997,6 @@ npm test</pre>
         responderExito(200, "OK", { mensaje: "Camper encontrado exitosamente.", camper: found });
       } 
       else if (url === "/api/campers" && metodo === "POST") {
-        // Validación de campos obligatorios (Middleware validator)
         if (!parsedBody.nombre || parsedBody.nombre.trim() === "") {
           return responderError(400, "Bad Request", "El campo 'nombre' es obligatorio y no puede estar vacío.");
         }
@@ -1858,16 +2085,24 @@ npm test</pre>
       mostrarToast("🔄 Arreglo en memoria restaurado a los 3 registros semilla");
     }
 
+    function copiarTexto(texto) {
+      navigator.clipboard.writeText(texto).then(() => {
+        mostrarToast("📋 Copiado al portapapeles");
+      }).catch(() => {
+        mostrarToast("⚠️ No se pudo copiar");
+      });
+    }
+
     function mostrarToast(msg) {
       const toast = document.getElementById("toastMsg");
       toast.textContent = msg;
       toast.style.display = "block";
-      setTimeout(() => { toast.style.display = "none"; }, 2800);
+      setTimeout(() => { toast.style.display = "none"; }, 2500);
     }
 
     // --- 4. GESTIÓN DE NAVEGACIÓN Y SLIDES ---
     let currentStep = 1;
-    const totalSteps = 8;
+    const totalSteps = 10;
 
     function goToStep(step) {
       if (step < 1 || step > totalSteps) return;
@@ -1903,7 +2138,6 @@ npm test</pre>
 
     // Atajos de Teclado
     document.addEventListener("keydown", (e) => {
-      // Ignorar si el usuario está escribiendo en el textarea o input
       if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) return;
 
       if (e.key === "ArrowRight") {

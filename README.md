@@ -20,10 +20,12 @@
 ### 🔗 **[https://anndreloopez012.github.io/campuslands-express-ejercicio-basico-interactivo/](https://anndreloopez012.github.io/campuslands-express-ejercicio-basico-interactivo/)**
 
 ### 🎮 ¿Qué funciones interactivas encontrarás en la web?
-- 🔍 **Explorador Interactivo de Código Línea a Línea (Slide 6):** Haz clic sobre cualquier línea de código de `src/app.js`, `src/routes/campers.routes.js` o los middlewares para desplegar un panel con la explicación técnica detallada, su propósito en Node.js y advertencias de errores comunes.
-- ⚡ **Simulador REST en Tiempo Real (Sandbox en Slide 7):** Un cliente HTTP integrado en el navegador para disparar peticiones `GET`, `POST`, `PUT` y `DELETE` sobre el arreglo de campers en memoria, visualizando el código de estado, los encabezados, la respuesta JSON y la tabla actualizada en tiempo real.
+- 🛠️ **Inicialización y Estructura Paso a Paso (Slide 6):** Comandos exactos de terminal (`mkdir`, `npm init -y`, `npm install express`, creación de carpetas y archivos base) y diagrama del árbol de archivos antes de ver el código.
+- 🔍 **Explorador Interactivo de Código Línea a Línea (Slide 7):** Haz clic sobre cualquier línea de código de `src/app.js`, `src/routes/campers.routes.js` o los middlewares para desplegar un panel con la explicación técnica detallada, su propósito en Node.js y advertencias de errores comunes.
+- 💻 **Ejecución y Pruebas Locales (Slide 8):** Comandos para levantar el servidor localmente con `npm run dev` y suite de comandos `cURL` para probar los 5 endpoints del CRUD en tu propia máquina.
+- ⚡ **Simulador REST en Tiempo Real (Sandbox en Slide 9):** Un cliente HTTP integrado en el navegador para disparar peticiones `GET`, `POST`, `PUT` y `DELETE` sobre el arreglo de campers en memoria, visualizando el código de estado, los encabezados, la respuesta JSON y la tabla actualizada en tiempo real.
 - 📖 **Modo Presentación vs Modo Lectura:** Pulsa la tecla `M` o el botón superior para alternar entre diapositivas de clase (con navegación por flechas `←` y `→`) o un documento continuo para lectura individual.
-- 📑 **Índice Temático Flotante (Tecla T):** Salta directamente a cualquiera de las 8 lecciones pedagógicas.
+- 📑 **Índice Temático Flotante (Tecla T):** Salta directamente a cualquiera de las 10 lecciones pedagógicas.
 
 ---
 
