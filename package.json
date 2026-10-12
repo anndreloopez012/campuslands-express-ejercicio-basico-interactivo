@@ -1,0 +1,26 @@
+{
+  "name": "campuslands-express-ejercicio-basico-interactivo",
+  "version": "1.0.0",
+  "description": "Ejercicio práctico y pedagógico de Express.js con Node.js en ECMAScript Modules (ESM) para Campuslands",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "test": "node test/test-api.js"
+  },
+  "keywords": [
+    "campuslands",
+    "express",
+    "nodejs",
+    "esm",
+    "api-rest",
+    "crud",
+    "educativo"
+  ],
+  "author": "Andre Lopez <andrelopez012@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
