@@ -2205,47 +2205,67 @@ export function reiniciarCampers() {
       db: "campuslands-express-crud > src > data > campers.db.js"
     };
 
-    // --- 2. MOTOR DE RESALTADO SINTÁCTICO ESTILO VS CODE DARK+ ---
+    // --- 2. MOTOR DE RESALTADO SINTÁCTICO ESTILO VS CODE DARK+ (TOKENIZER DE UNA SOLA PASADA) ---
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
     function highlightVSCode(codeLine) {
-      if (!codeLine) return "&nbsp;";
-
-      // 1. Escapar caracteres HTML básicos
-      let text = codeLine
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-
-      // Comentarios de una línea (// ...)
-      if (text.trim().startsWith("//")) {
-        return `<span class="hl-cmt">${text}</span>`;
-      }
-      // Comentarios JSDoc (* ...)
-      if (text.trim().startsWith("*") || text.trim().startsWith("/**") || text.trim().startsWith("*/")) {
-        return `<span class="hl-cmt">${text}</span>`;
+      if (!codeLine || codeLine.trim().length === 0) {
+        return codeLine ? escapeHtml(codeLine) : "&nbsp;";
       }
 
-      // 2. Resaltar Cadenas de Texto ("...", '...', `...`)
-      text = text.replace(/(`[^`]*`|"[^"]*"|'[^']*')/g, '<span class="hl-str">$1</span>');
+      // Si la línea completa es un comentario (// o bloque JSDoc)
+      const trimmed = codeLine.trim();
+      if (trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*") || trimmed.startsWith("*/")) {
+        return `<span class="hl-cmt">${escapeHtml(codeLine)}</span>`;
+      }
 
-      // 3. Palabras Clave de ECMAScript (Keywords)
-      text = text.replace(/\b(import|export|from|default|const|let|function|return|if|else|new|typeof)\b/g, '<span class="hl-kw">$1</span>');
+      // Tokenizador de pasada única: previene colisiones y corrupción de etiquetas HTML
+      const tokenRegex = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|(`[^`\\]*(?:\\.[^`\\]*)*`|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(\b\d+(?:\.\d+)?\b)|(\b(?:import|export|from|default|const|let|var|function|return|if|else|new|typeof|async|await)\b)|(\b(?:Router|Date|Math|Number|JSON|String|Boolean|Array|Object|Promise)\b)|(\b[a-zA-Z_$][a-zA-Z0-9_$]*(?=\s*\())|(\b(?:req|res|next|err|error|app|router|campers|express|console|PORT|id|nombre|modulo|nivel|nuevoId|nuevoCamper|idBuscado|camperEncontrado|camperEliminado|indice|timestamp|metodo|url|codigoEstado|mensajeRespuesta|c)\b)|([{}()\[\]])|(=>|===|!==|==|!=|<=|>=|[=+\-*\/%&|!<>?:,;.])/g;
 
-      // 4. Clases y Tipos Globales
-      text = text.replace(/\b(Router|Date|Math|Number|JSON)\b/g, '<span class="hl-type">$1</span>');
+      let result = "";
+      let lastIndex = 0;
+      let match;
 
-      // 5. Métodos y Funciones
-      text = text.replace(/\b(express|use|get|post|put|delete|listen|status|json|find|push|findIndex|splice|trim|log|error|parseInt|isNaN|map|reiniciarCampers|validarCamper|logger|errorHandler)\b(?=\s*\()/g, '<span class="hl-fn">$1</span>');
+      while ((match = tokenRegex.exec(codeLine)) !== null) {
+        if (match.index > lastIndex) {
+          result += escapeHtml(codeLine.slice(lastIndex, match.index));
+        }
 
-      // 6. Variables y Parámetros
-      text = text.replace(/\b(req|res|next|err|c|PORT|app|router|campers|id|nombre|modulo|nivel|nuevoId|nuevoCamper|idBuscado|camperEncontrado|camperEliminado|indice|timestamp|metodo|url|codigoEstado|mensajeRespuesta)\b/g, '<span class="hl-param">$1</span>');
+        const [raw, cmt, str, num, kw, typ, fn, param, punc, op] = match;
+        const esc = escapeHtml(raw);
 
-      // 7. Números
-      text = text.replace(/\b(\d+)\b/g, '<span class="hl-num">$1</span>');
+        if (cmt) {
+          result += `<span class="hl-cmt">${esc}</span>`;
+        } else if (str) {
+          result += `<span class="hl-str">${esc}</span>`;
+        } else if (num) {
+          result += `<span class="hl-num">${esc}</span>`;
+        } else if (kw) {
+          result += `<span class="hl-kw">${esc}</span>`;
+        } else if (typ) {
+          result += `<span class="hl-type">${esc}</span>`;
+        } else if (fn) {
+          result += `<span class="hl-fn">${esc}</span>`;
+        } else if (param) {
+          result += `<span class="hl-param">${esc}</span>`;
+        } else if (punc) {
+          result += `<span class="hl-punc">${esc}</span>`;
+        } else if (op) {
+          result += `<span class="hl-op">${esc}</span>`;
+        } else {
+          result += esc;
+        }
 
-      // 8. Operadores y Llaves coloreadas (Bracket Pair Colorization)
-      text = text.replace(/(=&gt;|===|!==|==|!=|=|\+|\*|\/|\|\||&&)/g, '<span class="hl-op">$1</span>');
+        lastIndex = tokenRegex.lastIndex;
+      }
 
-      return text;
+      if (lastIndex < codeLine.length) {
+        result += escapeHtml(codeLine.slice(lastIndex));
+      }
+
+      return result;
     }
 
     // --- 3. DICCIONARIO DIDÁCTICO DE LÍNEAS DE CÓDIGO ---
